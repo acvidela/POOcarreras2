@@ -20,7 +20,7 @@
     }
 }
 
-    public function get_instance(){
+    public static function getInstance(){
         if (isset (self::$db))
             return self::$db;
         else

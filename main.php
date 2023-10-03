@@ -3,6 +3,7 @@
  require_once('menuAdmin.php');
  require_once('atletaManager.php'); 
  require_once('carreraManager.php');
+ require_once('conexion.php');
   
   //Dar de alta un participante
   function altaParticipante($menu,$atletaManager){
@@ -237,6 +238,8 @@ $menu = new Menu;
 $menu->cls();
 $menu->pantallaBienvenida('Es-Tan-Dil');
 
+$db = Conexion::getInstance();
+ 
 $atletaManager = new AtletaManager();
 
 //$atletaManager->cargaInicial();

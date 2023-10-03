@@ -36,31 +36,31 @@ class MenuAdmin extends Menu{
        
       //Dar de alta una carrera  $id,$nombre,$circuito,$fecha,$precio,$kits
         protected function altaCarrera(){
-        $nombre = self::readln("Ingrese nombre carrera: ");
-        $circuito = self::readln("Ingrese circuito: ");
-        $fecha =  self::readln("Ingrese fecha de carrera, con el formato dd/mm/yyyy: ");
-        $precio = self::readln("Ingrese precio de la carrera: ");
-        $kits = new Kits(null);
-        $rta = self::readln("La carrera entregará chip? S/N: ");
-        if ($rta== 'S' || $rta == 's'){
-                $kits->setChip(TRUE);
-        }
-        $rta = self::readln("La carrera entregará número? S/N: ");
-        if ($rta== 'S' || $rta == 's'){
-                $kits->setNumero(TRUE);
-        }
-        $rta = self::readln("La carrera entregará medalla? S/N: ");
-        if ($rta== 'S' || $rta == 's'){
-                $kits->setMedalla(TRUE);
-        }
-        $rta = self::readln("La carrera entregará remera? S/N: ");
-        if ($rta== 'S' || $rta == 's'){
-                $kits->setRemera(TRUE);
-        }
-        $carrera = new Carrera($nombre,$circuito,$fecha, $precio,$kits);
-        
-        $carrera->setId(5);
-        $this->carreraManager->agregar($carrera);
+                $nombre = self::readln("Ingrese nombre carrera: ");
+                $circuito = self::readln("Ingrese circuito: ");
+                $fecha =  self::readln("Ingrese fecha de carrera, con el formato dd/mm/yyyy: ");
+                $precio = self::readln("Ingrese precio de la carrera: ");
+                $kits = new Kits(null);
+                $rta = self::readln("La carrera entregará chip? S/N: ");
+                if ($rta== 'S' || $rta == 's'){
+                        $kits->setChip(TRUE);
+                }
+                $rta = self::readln("La carrera entregará número? S/N: ");
+                if ($rta== 'S' || $rta == 's'){
+                        $kits->setNumero(TRUE);
+                }
+                $rta = self::readln("La carrera entregará medalla? S/N: ");
+                if ($rta== 'S' || $rta == 's'){
+                        $kits->setMedalla(TRUE);
+                }
+                $rta = self::readln("La carrera entregará remera? S/N: ");
+                if ($rta== 'S' || $rta == 's'){
+                        $kits->setRemera(TRUE);
+                }
+                $carrera = new Carrera($nombre,$circuito,$fecha, $precio,$kits);
+                
+                $carrera->setId(5);
+                $this->carreraManager->agregar($carrera);
   }
   
     //Dar de baja una carrera

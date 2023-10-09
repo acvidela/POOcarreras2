@@ -1,17 +1,28 @@
 <?php
     class Conexion{
-        static $db = null;
-        private $host = 'mahmud.db.elephantsql.com';
-        private $port = '5432';
-        private $database = 'htslmwoa';
-        private $user = 'htslmwoa';
-        private $password = 'ZRmocbFztc6uzg9rVaWzB11E-jgPEFT6';
+        private static $db = null;
+        // Información de conexión.
+        /* private $host;
+        private $port;
+        private $database;
+        private $user;
+        private $password; */
     
+        private static function getDatosDb(){
+            $nombreArchivo = "datos\base.json";
+            if (is_readable($nombreArchivo)){
+                $datos = file_get_contents($nombreArchivo);
+                $datos = json_decode($datos);
+               return $datos;
+            }
+            return null;
+        }
+        
         private function __construct(){
         try {
-            // Información de conexión
             // Cadena de conexión
-            $dsn = "pgsql:host=$this->host;port=$this->port;dbname=$this->database;user=$this->user;password=$this->password";
+            $datosDb = self::getDatosDb();
+            $dsn = "pgsql:host=$datosDb->host;port=$datosDb->port;dbname=$datosDb->database;user=$datosDb->user;password=$datosDb->password";
         
             // Crear una instancia de PDO
             self::$db = new PDO($dsn);
@@ -24,7 +35,7 @@
             // Manejo de errores
             echo 'Error de conexión: ' . $e->getMessage();
         }
-        }
+    }
         
     public static function getInstance(){
         if (isset (self::$db))
@@ -32,4 +43,5 @@
         else
             return new self();
     }
+    
 }

@@ -1,14 +1,19 @@
 <?php
+require_once('menuAdmin.php');
 
 class Menu{
+    
+    public function __construct(){
+    }
+
     //Función que muestra una línea en pantalla con el salto de línea
-    public function writeln($texto) {
+    public static function writeln($texto) {
         echo ($texto);
         echo(PHP_EOL);
     }
 
     //Función que muestra una línea en pantalla con el salto de línea
-    public function readln($texto) {
+    public static function readln($texto) {
         echo ($texto);
         $rta = readline();
         echo(PHP_EOL);
@@ -39,45 +44,67 @@ class Menu{
         self::writeln("");
     }
 
-    public function elegirUsuario(){
-		self::writeln("Elige un tipo de usuario: ");
-        self::writeln("0. Salir");
-        self::writeln("1. Paricipante");
-        self::writeln("2. Administrador");
-        self::writeln("");
-        return self::readln("opción: ");   
+    protected function exit(){
+        return 1;   
     }
 
-   
-    public function Pagos(){
-        self::writeln("Menu Pagos");
-        self::writeln("");
+    //Opciones es una matriz, en cada fila el array opción tiene el número de la opción, nombre de la opción y la función
+    protected function menu($titulo, $opciones) {
+        $opcion = 1;
+
+        while($opcion != 0){
+            echo (PHP_EOL);
+            echo ('---------------------------'.PHP_EOL);
+            echo ($titulo.PHP_EOL);
+            echo ('---------------------------'.PHP_EOL);
+    
+            foreach ($opciones as $opcion) {
+                echo ($opcion[0] .' - '. $opcion[1]. PHP_EOL );
+            } 
+    
+            $opcion = readline('Elija una opcion: ');
+        
+            if (isset($opciones[$opcion])) {
+                $funcion = $opciones[$opcion][2];
+                call_user_func($funcion);
+            } else {
+            self::writeln("Opción inválida");
+            }
+        }
+    }
+
+    //Primera elección del programa, para decidir quién opera con el sistema
+    public function elegirUsuario(){
+		self::cls();
+
+        $titulo = "Elige un tipo de usuario:";
+        
+        $opciones = [];
+
+        $opciones[0][0]= 0;
+        $opciones[0][1] = "Salir";
+        $opciones[0][2] = array($this, "exit");  //Llamar a la función exit de esta clase
+        
+        $opciones[1][0] = 1;
+        $opciones[1][1] = "Participante";
+        $opciones[1][2] = array($this,"operacionesParticipante");
+
+        $opciones[2][0] = 2;
+        $opciones[2][1] = "Administrador";
+        $opciones[2][2] = array($this,"menuAdmin");
+
+        self::menu($titulo,$opciones);
+    }
+
+    private function operacionesParticipante(){
+        self::writeln("Operaciones del participante");
     }
     
-    //Se eligió 2, administrar participantes (ABM)
-    public function ABMParticipantes(){          
-        self::writeln("Menu ABM Participantes");
-        self::writeln("0. Volver al menu anterior");
-        self::writeln("1. Alta participante");
-        self::writeln("2. Baja participante");
-        self::writeln("3. Modificar participante");
-        self::writeln("4. Mostrar participantes");
-        return self::readln("opción: ");  
-
+    private function menuAdmin(){
+        $menuAdmin = new MenuAdmin();
+        $menuAdmin->operacionesAdmin();
     }
 
-
-       
-    public function participante(){
-		self::cls();       
-        self::writeln("Elija la operación a realizar: ");
-        self::writeln("0. Volver al menu anterior");
-        self::writeln("1. Registrarme en el sistema");
-        self::writeln("2. Administrar mis equipos");
-        self::writeln("3. Administrar mis pagos");
-        self::writeln("4. Administrar mis carreras");
-        return self::readln("opción: ");  
-    }
 }
 
 

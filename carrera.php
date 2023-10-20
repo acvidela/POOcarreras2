@@ -151,4 +151,84 @@ class Carrera {
 
         return $this;
     }
+
+
+    //Imprime por pantalla una carrera
+    public function mostrar(){
+        echo "ID: " . $this->getId() . ", Nombre: " . $this->getNombre() . ", Circuito: " . $this->getCircuito() .", Fecha: " . $this->getFecha() . ", Precio: " .$this->getPrecio();
+        echo(PHP_EOL);
+        $this->getKits()->mostrar();
+        echo(PHP_EOL);
+    }
+
+      
+    /*
+    /   Guarda la carrera en la base de datos y le setea el id generado por la base de datos al insertarlo
+    */
+    public function save() {
+        //Obtiene el kit de la carrera a guardar
+        $kits = $this->getKits();
+        $kits->save();
+        $kitId = $kits->getId();
+
+        //Obtiene los datos de la carrera para guardar
+        $nombre = $this->getNombre();
+        $circuito = $this->getCircuito();
+        $fecha = $this->getFecha();
+        $precio = $this->getPrecio();
+                
+        $sql = "INSERT INTO carreras (nombre, circuito, fecha, precio, id_kits)
+                VALUES ('$nombre', '$circuito', '$fecha', '$precio', $kitId)";
+
+        Conexion::ejecutar($sql);
+
+        $idCarrera = Conexion::getLastId();
+        $this->setId($idCarrera);
+        
+        //Agrega como clave extranjera en el kits el id de la carrera
+        $sql = "UPDATE kits 
+                SET id_carrera = $idCarrera
+                WHERE id = $kitId";
+
+        Conexion::ejecutar($sql);
+
+    }
+    
+    //Borra la carrera de la base de datos, el kit lo borra en cascade cuando borro la carrera
+    public function delete(){
+        $sql = "DELETE FROM carreras
+                WHERE id = ".$this->id;
+        Conexion::ejecutar($sql);
+    }
+
+     /*
+    /   Modifica la carrera en la base de datos
+    */
+    public function update() {
+        
+        //Obtiene los datos de la carrera para guardar
+        $id = $this->getId();
+        $nombre = $this->getNombre();
+        $circuito = $this->getCircuito();
+        $fecha = $this->getFecha();
+        $precio = $this->getPrecio();
+        
+        $sql = "UPDATE carreras
+        SET nombre = :nombre,
+            circuito = :circuito,
+            fecha = :fecha,
+            precio = :precio
+        WHERE id = $id";
+
+        $stmt = Conexion::prepare($sql);
+        $stmt->bindParam(':nombre', $nombre, PDO::PARAM_STR);
+        $stmt->bindParam(':circuito', $circuito, PDO::PARAM_STR);
+        $stmt->bindParam(':fecha', $fecha, PDO::PARAM_STR); 
+        $stmt->bindParam(':precio', $precio, PDO::PARAM_INT); 
+
+        $stmt->execute();
+    }
+
+   
+
 }

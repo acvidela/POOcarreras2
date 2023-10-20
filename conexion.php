@@ -3,13 +3,7 @@
     class Conexion{
     
         private static $db = null;
-        // Información de conexión.
-        /* private $host;
-        private $port;
-        private $database;
-        private $user;
-        private $password; */
-    
+            
         //Obtiene los datos de ingresos a la DB de un archivo json local
         private static function getDatosDb(){
             $nombreArchivo = "datos\base.json";
@@ -68,11 +62,24 @@
             $pDO->query($sql);
         }
 
+        /**
+         * Prepara la sentencia sql
+         */
+        static function prepare($sql) {
+            $pDO = self::getConexion();
+            return $pDO->prepare($sql);
+        }
+
+ 
         static function getLastId() {
             $pDO = self::getConexion();
             $lastId = $pDO->lastInsertId();
             
             return $lastId;
         }
-    
+ 
+        
+        static function closeConexion() {
+            self::$db = null;
+        }
 }

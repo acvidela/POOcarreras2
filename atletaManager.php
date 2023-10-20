@@ -3,85 +3,91 @@ require_once('atleta.php');
 require_once('arrayIdManager.php');
 
 class AtletaManager extends ArrayIdManager{
-    
-	// Agregar atletas que ya estén en el sistema    
-    public function cargaInicial(){
-      self::agregar(new Atleta(self::getNuevoId(), 'Juan', 'juan@example.com','04/06/1999'));
-      self::agregar(new Atleta(self::getNuevoId(), 'María', 'maria@example.com','14/08/2000'));
-      self::agregar(new Atleta(self::getNuevoId(), 'Pedro', 'pedro@example.com','12/03/1992'));
-      self::agregar(new Atleta(self::getNuevoId(), 'José', 'jose@gmail.com','12/03/2001'));
-    }
-    
-    
-    public function getJSON() {
-        $jsonAtletas = [];
-        $atletas = $this->getArreglo();
-    
-        foreach ($atletas as $atleta) {
-            $jsonAtletas[] = $atleta->toArray(); //método "toArray()" en la clase Atleta
-        }
-    
-        $jsonString = json_encode($jsonAtletas, JSON_PRETTY_PRINT);
-    
-    //    $ids = $this->getIds();  // devuelve una cadena JSON válida con los IDs
-    
-        $finalJson = [
-            "atletas" => $jsonAtletas,
-    //        "ids" => json_decode($ids) // Decodificar la cadena JSON de IDs
-        ];
-    
-        return json_encode($finalJson, JSON_PRETTY_PRINT);
-    }
-        
-       
-    //Crea el arreglo desde el archivo de texto
-    public function setJSON($datos){
-         $atletasDatos = json_decode($datos,1);
-         if (isset($atletasDatos['atletas'])) {
-            $atletas = $atletasDatos['atletas'];
-            foreach ($atletas as $atleta) {
-                $nuevoAtleta = new Atleta($atleta['id'],$atleta['nombre'],$atleta['email'], $atleta['fechaNacimiento']);
-                $this->agregarJSON($nuevoAtleta);
-            }
-      //      $this->setIds($atletasDatos['ids']);
-         }
-    }
-    
-            
-    // Actualizar los datos de un atleta por su ID
-    
-    public function actualizaratleta($id, $nombre, $email) {
-		$atletas = self::getArreglo();         
-        foreach ($atletas as $atleta) {
-            if ($atleta->getId() === $id) {
-                $atleta->setNombre($nombre);
-                $atleta->setEmail($email);
-                break;
-            }
-        }
-    }  
 
+    //De la base de datos levanta los atletas y los agrega al arreglo para manipularlos
+    protected function levantarAtletas(){
+        $sql = "select * from atletas";
+        $atletas = Conexion::query($sql);
+        
+        foreach ($atletas as $atleta){
+            $nuevoAtleta = new Atleta($atleta->nombre, $atleta->email, $atleta->fechadenacimiento);
+            $nuevoAtleta->setId($atleta->id);
+            
+            $this->agregar($nuevoAtleta);
+        }
+
+    }
+    
+    //Crea el arreglo de Carreras a partir de los datos de la base de datos
+    public function __construct()
+    {
+       $this->arreglo = [];
+       $this->levantarAtletas();
+    }
+            
+    //Dar de baja un atleta, se pide el id del atleta a eliminar. Se elimina de la base de datos y del arreglo
+    public function bajaAtleta(){
+        $id = Menu::readln("Ingrese número del atleta a eliminar:");
+        if ($this->existeId($id)){
+            $atleta = $this->getPorId($id);
+            $atleta->delete();
+            $this->eliminarPorId($id);
+        } else{
+            $id = Menu::readln("No existe el id a eliminar.");
+        }
+    }
+    
+    // Actualizar los datos de un atleta por su ID
+    public function modificaAtleta() {
+	    $id = Menu::readln("Ingrese Id de atleta a modificar: ");
+        if($this->existeId($id)){
+            $atletaModificado = $this->getPorId($id);         	   
+            Menu::writeln("A continuación ingrese los nuevos datos, enter para dejarlos sin modificar");
+            $nombre = Menu::readln("Ingrese nombre y apellido: ");
+            if ($nombre != ""){
+                $atletaModificado->setNombre($nombre);
+            }
+            $email = Menu::readln("Ingrese email: ");
+            if ($email != ""){
+                $atletaModificado->setEmail($email);
+            }
+            $fechaNacimiento =  Menu::readln("Ingrese fecha de nacimiento, con el formato dd/mm/yyyy: ");
+            if ($fechaNacimiento != ""){
+                $atletaModificado->setFechaNacimiento($fechaNacimiento);
+            }
+            //Lo modifica en la Base de Datos
+            $atletaModificado->update();
+            //Lo modifica en el arreglo  
+            $this->modificar($atletaModificado);
+                }else {
+                    Menu::writeln("El id ingresado no se encuentra entre nuestros atletas");
+            }
+    }
+       
     // Mostrar por pantalla todos los atletas
 	public function mostrarAtletas(){
-		$atletas = self::getArreglo();
+		$atletas = $this->getArreglo();
 		foreach ($atletas as $atleta) {
-	    	echo "ID: " . $atleta->getId() . ", Nombre: " . $atleta->getNombre() . ", Email: " . $atleta->getEmail() . ", Edad: " . $atleta->getEdad();
+	    	$atleta->mostrar();
    	 	echo(PHP_EOL);
       }
       echo(PHP_EOL);
    }
+
+    /*
+    /   Guarda el atleta en la base de datos y le setea el id generado por la base de datos al insertarlo
+    */
+    public function altaAtleta() {
+        $nombre = Menu::readln("Ingrese nombre y apellido: ");
+        $email = Menu::readln("Ingrese email: ");
+        $fechaNacimiento =  Menu::readln("Ingrese fecha de nacimiento, con el formato dd/mm/yyyy: ");
+    
+        $atleta = new Atleta($nombre,$email,$fechaNacimiento);
+        $atleta->save();
+
+        $this->agregar($atleta);
+   
+    }
+
 }
 
-/*
-//Main para probar
-// Crear el objeto del Administrador de Atleta
-$atletaManager = new AtletaManager();
-$atletaManager->cargaInicial();
-$atletaManager->mostrarAtletas();
-// Actualizar un Atleta
-$atletaManager->actualizaratleta(2, 'María Rodríguez', 'maria.rodriguez@example.com','14/08/2001');
-// Eliminar un Atleta
-$atletaManager->eliminarPorId(3);
-$atletaManager->mostrarAtletas();
-*/ 
-?>

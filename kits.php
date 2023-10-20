@@ -3,6 +3,7 @@
 
 class Kits {
 
+    private $id;
     private $chip = FALSE;
     private $numero = FALSE;
     private $remera= FALSE;
@@ -10,6 +11,10 @@ class Kits {
 
     public function __construct($parametros)
     {
+        if (isset($parametros['id'])) {
+            $this->id = $parametros['id'];
+        }
+
         if (isset($parametros['chip'])) {
             $this->chip = $parametros['chip'];
         }
@@ -122,6 +127,73 @@ class Kits {
 
         return $this;
     }
+
+    /**
+     * Get the value of id
+     */ 
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the value of id
+     *
+     * @return  self
+     */ 
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    public function save(){
+        $chip = $this->getChip();
+        $numero = $this->getNumero();
+        $remera= $this->getRemera();
+        $medalla = $this -> getMedalla();
+
+        //Inserta el kit en la base de datos
+        $sql = "INSERT INTO kits (remera, numero, medalla, chip)
+                VALUES (:remera, :numero, :medalla, :chip)";
+        $stmt = Conexion::prepare($sql);
+        // Vincular los valores a los marcadores de posición
+        $stmt->bindParam(':remera', $remera, PDO::PARAM_BOOL);
+        $stmt->bindParam(':numero', $numero, PDO::PARAM_BOOL);
+        $stmt->bindParam(':medalla', $medalla, PDO::PARAM_BOOL);
+        $stmt->bindParam(':chip', $chip, PDO::PARAM_BOOL);
+        $stmt->execute();
+              
+        $this->setId(Conexion::getLastId()); 
+       
+    }
+
+    public function update(){
+        $id = $this->getId();
+        $chip = $this->getChip();
+        $numero = $this->getNumero();
+        $remera= $this->getRemera();
+        $medalla = $this -> getMedalla();
+
+        //Modifica el kit en la base de datos
+        $sql = "UPDATE kits
+                SET remera = :remera,
+                    numero  = :numero,
+                    medalla = :medalla,
+                    chip = :chip
+                WHERE id = ".$id;
+        $stmt = Conexion::prepare($sql);
+        // Vincular los valores a los marcadores de posición
+        $stmt->bindParam(':remera', $remera, PDO::PARAM_BOOL);
+        $stmt->bindParam(':numero', $numero, PDO::PARAM_BOOL);
+        $stmt->bindParam(':medalla', $medalla, PDO::PARAM_BOOL);
+        $stmt->bindParam(':chip', $chip, PDO::PARAM_BOOL);
+        $stmt->execute();
+      
+    }
+ 
+
 }
 
 /*

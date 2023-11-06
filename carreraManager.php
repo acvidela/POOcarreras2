@@ -178,6 +178,19 @@ class CarreraManager extends ArrayIdManager{
     }else {
         Menu::writeln("El id ingresado no se encuentra entre nuestras carreras");
     }
-}
+    }
+
+    public function inscribirParticipante(){
+        $id = Menu::readln("Ingrese Id de carrera para inscribir: ");
+        if($this->existeId($id)){
+            $carrera = $this->getPorId($id);
+            $participantes = $carrera->getParticipantes();
+            //Agrega en el arreglo/tabla de particpantes uno nuevo en la carrera deseada
+            $participantes->altaParticipante();
+        }
+        else{
+            $id = Menu::readln("No existe el id de carrera ingresado.");
+        }
+    }
 }
 

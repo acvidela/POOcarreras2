@@ -4,8 +4,11 @@ require_once('arrayIdManager.php');
 
 class ParticipanteManager extends ArrayIdManager{
 
+    private $idCarrera;
+
     //De la base de datos levanta todos los participantes inscriptos en una carrera y los agrega al arreglo para manipularlos
-    protected function levantarParticipantes($idCarrera){
+    protected function levantarParticipantes(){
+        $idCarrera = $this->idCarrera;
         $sql = "select * from participantes
                 where id_carrera = ".$idCarrera;
         $participantes = Conexion::query($sql);
@@ -23,7 +26,8 @@ class ParticipanteManager extends ArrayIdManager{
     public function __construct($idCarrera)
     {
        $this->arreglo = [];
-       $this->levantarParticipantes($idCarrera);
+       $this->idCarrera = $idCarrera;
+       $this->levantarParticipantes();
     }
             
     
@@ -35,7 +39,18 @@ class ParticipanteManager extends ArrayIdManager{
         }
     }    
     
-    
+    //Inscribe un participante en la carrera, creándolo e ingresándolo en DB
+    public function altaParticipante(){
+        $idAtleta = Menu::readln("Ingrese el número de atleta a incribir: ");
+        $categoria = Menu::readln("Ingrese en qué categoria desearía inscibirse: ");
+        
+        $participante = new Participante($this->idCarrera, $idAtleta, 0, 0,0,$categoria);
+        $participante->save();
+
+        $this->agregar($participante);
+    }
+   
+
     //Dar de baja un participante de una carrera, se pide el id del participante a eliminar. Se elimina de la base de datos y del arreglo
     public function bajaAtleta(){
         $id = Menu::readln("Ingrese número del atleta a eliminar:");

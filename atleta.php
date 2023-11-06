@@ -10,9 +10,11 @@ class Atleta {
     public function __construct($nombre, $email, $fechaNacimiento) {
         $this->nombre = $nombre;
         $this->email = $email;
-        $this->fechaNacimiento = $fechaNacimiento;
-        //new DateTime(date("d-m-Y"));
-        //$this->fechaNacimiento = DateTime::createFromFormat('d/m/Y',$fechaNacimiento);
+        if (is_string($fechaNacimiento)){
+            $this->fechaNacimiento = date("Y-m-d H:i:s", strtotime($fechaNacimiento));
+        } else{
+            $this->fechaNacimiento = $fechaNacimiento;       
+        } 
    }
 
     // Getters y Setters
@@ -34,11 +36,10 @@ class Atleta {
 
     public function getEdad(){
        // Obtener la fecha de nacimiento y convertirla a un objeto DateTime
-        $fechaNacimiento = DateTime::createFromFormat('Y-m-d', $this->getFechaNacimiento());
-        $ahora = new DateTime(date("d-m-Y"));
-        $diferencia = $ahora->diff($fechaNacimiento);
-        return $diferencia->format("%y");
-
+        $fechaNacimiento = new DateTime($this->getFechaNacimiento());
+        $ahora = new DateTime('now'); //Fecha de hoy
+        $diferencia = $ahora->diff($fechaNacimiento);  //Calcular la diferencia de hoy con la fecha de nacimiento
+        return $diferencia->format("%y"); //Expresar la diferencia en años, para dar la edad
     }
 
     public function setNombre($nombre) {
@@ -78,7 +79,7 @@ class Atleta {
         $sql = "INSERT INTO atletas (nombre, email, fechadenacimiento)
                 VALUES ('$nombre', '$email', '$fechaNacimiento')";
 
-         Conexion::ejecutar($sql);
+        Conexion::ejecutar($sql);
 
         $this->setId(Conexion::getLastId());
 

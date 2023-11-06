@@ -250,4 +250,10 @@ class Carrera {
         $participantes = $this->getParticipantes();
         $participantes->mostrar(); 
     }
+
+    public function modificarParticipante(){
+        $participantes = $this->getParticipantes();
+        $participantes->modificaParticipante(); 
+    }
+
 }

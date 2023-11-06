@@ -72,6 +72,19 @@ class CarreraManager extends ArrayIdManager{
 
     }
  
+    //Modifica los datos de un participante(posicion, pago, categoria) en una carrera, se solicita el id de la carrera
+    public function modificarParticipante(){
+        $id = Menu::readln("Ingrese número de la carrera en la que realizar modificaciones de participantes: ");
+        if ($this->existeId($id)){
+            $carrera = $this->getPorId($id);
+            //Muestra los datos de la carrera
+            $carrera->modificarParticipante();
+        } else{
+            $id = Menu::readln("No existe el id de carrera seleccionada.");
+        }
+
+    }
+
     //Dar de baja una carrera, se pide el id de la carrera a eliminar. Se elimina de la base de datos y del arreglo
     public function bajaCarrera(){
         $id = Menu::readln("Ingrese número de la carrera a eliminar:");

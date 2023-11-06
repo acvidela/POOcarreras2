@@ -14,7 +14,7 @@ class ParticipanteManager extends ArrayIdManager{
         $participantes = Conexion::query($sql);
         
         foreach ($participantes as $participante){
-            $nuevoParticipante = new Participante($participante->id_carrera, $participante->id_atleta, $participante->pago, $participante->posGeneral, $participante->pos_categoria, $participante->categoria);
+            $nuevoParticipante = new Participante($participante->id_carrera, $participante->id_atleta, $participante->pago, $participante->pos_general, $participante->pos_categoria, $participante->categoria);
             $nuevoParticipante->setId($participante->id);
             
             $this->agregar($nuevoParticipante);
@@ -42,12 +42,19 @@ class ParticipanteManager extends ArrayIdManager{
     //Inscribe un participante en la carrera, creándolo e ingresándolo en DB
     public function altaParticipante(){
         $idAtleta = Menu::readln("Ingrese el número de atleta a incribir: ");
-        $categoria = Menu::readln("Ingrese en qué categoria desearía inscibirse: ");
-        
-        $participante = new Participante($this->idCarrera, $idAtleta, 0, 0,0,$categoria);
-        $participante->save();
-
-        $this->agregar($participante);
+        //Verifico que existe el atleta a inscribir
+        $sql = "SELECT id
+                FROM atletas
+                WHERE $idAtleta = id";
+        $atleta = Conexion::ejecutar($sql);
+        if ($atleta != null){
+            $categoria = Menu::readln("Ingrese en qué categoria desearía inscibirse: ");
+            $participante = new Participante($this->idCarrera, $idAtleta, 0, 0,0,$categoria);
+            $participante->save();
+            $this->agregar($participante);
+        } else{
+            Menu::writeln("No existe el atleta, darlo de alta en el sistema. ");
+        }
     }
    
 
@@ -63,32 +70,43 @@ class ParticipanteManager extends ArrayIdManager{
         }
     }
     
-    // Actualizar los datos de un atleta por su ID
-    public function modificaAtleta() {
-	    $id = Menu::readln("Ingrese Id de atleta a modificar: ");
-        if($this->existeId($id)){
-            $atletaModificado = $this->getPorId($id);         	   
-            Menu::writeln("A continuación ingrese los nuevos datos, enter para dejarlos sin modificar");
-            $nombre = Menu::readln("Ingrese nombre y apellido: ");
-            if ($nombre != ""){
-                $atletaModificado->setNombre($nombre);
-            }
-            $email = Menu::readln("Ingrese email: ");
-            if ($email != ""){
-                $atletaModificado->setEmail($email);
-            }
-            $fechaNacimiento =  Menu::readln("Ingrese fecha de nacimiento, con el formato dd/mm/yyyy: ");
-            if ($fechaNacimiento != ""){
-                $atletaModificado->setFechaNacimiento($fechaNacimiento);
-            }
-            //Lo modifica en la Base de Datos
-            $atletaModificado->update();
-            //Lo modifica en el arreglo  
-            $this->modificar($atletaModificado);
+    // Actualizar los datos de un participante por su ID
+    public function modificaParticipante() {
+	    $idAtleta = Menu::readln("Ingrese Id de atleta a modificar: ");
+        //Verifico que existe, ya está inscripto
+        $participantes = $this->getArreglo();
+        foreach ($participantes as $participante){
+            if ($participante->getIdAtleta()==$idAtleta){
+                $idParticipante = $participante->getId();
+                if ($this->existeId($idParticipante)){
+                    Menu::writeln("A continuación ingrese los nuevos datos, enter para dejarlos sin modificar");
+                    $participante = $this->getPorId($idParticipante);
+                    $categoria = Menu::readln("Ingrese nueva categoria: ");
+                    if ($categoria != ""){
+                        $participante->setCategoria($categoria);
+                    }
+                    $pago = Menu::readln("Ingrese monto pagado: ");
+                    if ($pago != ""){
+                        $participante->setPago($pago);
+                    }
+                    $posGeneral = Menu::readln("Ingrese posición general: ");
+                    if ($posGeneral != ""){
+                        $participante->setPosGeneral($posGeneral);
+                    }
+                    $posCategoria = Menu::readln("Ingrese posición en la categoría: ");
+                    if ($posGeneral != ""){
+                        $participante->setPosCategoria($posCategoria);
+                    }
+
+                    $participante->update();
+                    $this->agregar($participante);
                 }else {
-                    Menu::writeln("El id ingresado no se encuentra entre nuestros atletas");
-            }
+                    Menu::writeln("El id ingresado no se encuentra inscripto");
+                }
+            }    
+        }
     }
+        
        
     // Mostrar por pantalla todos los atletas
 	public function mostrarAtletas(){

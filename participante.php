@@ -209,17 +209,17 @@ class Participante {
         $posCategoria = $this->getPosCategoria();
         $categoria = $this->getCategoria();
                 
-        $sql = "UPDATE atletas
+        $sql = "UPDATE participantes
         SET pago = :pago,
             pos_general = :posGeneral,
             pos_categoria = :posCategoria,
             categoria = :categoria
         WHERE id = $id";
-
+         
         $stmt = Conexion::prepare($sql);
         $stmt->bindParam(':pago', $pago, PDO::PARAM_INT);
-        $stmt->bindParam(':pos_general', $posGeneral, PDO::PARAM_INT);
-        $stmt->bindParam(':pos_categoria', $posCategoria, PDO::PARAM_INT); 
+        $stmt->bindParam(':posGeneral', $posGeneral, PDO::PARAM_INT);
+        $stmt->bindParam(':posCategoria', $posCategoria, PDO::PARAM_INT); 
         $stmt->bindParam(':categoria', $categoria, PDO::PARAM_STR); 
 
         $stmt->execute();

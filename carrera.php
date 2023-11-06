@@ -1,5 +1,7 @@
 <?php
 require_once('kits.php');
+require_once('participanteManager.php');
+
 class Carrera {
 
     private $id;
@@ -8,10 +10,10 @@ class Carrera {
     private $fecha;
     private $precio;
     private $kits;
+    private $participantes = null;
 
     public function __construct($nombre,$circuito,$fecha,$precio,$kits)
     {
-       // $this->id = $id;
         $this->nombre = $nombre;
         $this->circuito = $circuito;
         $this->fecha = $fecha;
@@ -153,6 +155,8 @@ class Carrera {
     }
 
 
+    //Operaciones en la Base de Datos
+
     //Imprime por pantalla una carrera
     public function mostrar(){
         echo "ID: " . $this->getId() . ", Nombre: " . $this->getNombre() . ", Circuito: " . $this->getCircuito() .", Fecha: " . $this->getFecha() . ", Precio: " .$this->getPrecio();
@@ -229,6 +233,21 @@ class Carrera {
         $stmt->execute();
     }
 
-   
+ 
+    /**
+     * Get the value of participantes
+     * Levanta los participantes de la base de datos para esa carrera
+     */ 
+    public function getParticipantes()
+    {
+        if (!isset($this->participantes)){
+            $this->participantes = new ParticipanteManager($this->id);
+        }
+        return $this->participantes;
+    }
 
+    public function mostrarResultado(){
+        $participantes = $this->getParticipantes();
+        $participantes->mostrar(); 
+    }
 }

@@ -13,7 +13,7 @@ class CarreraManager extends ArrayIdManager{
         foreach ($carreras as $carrera){
             $idKits = $carrera->id_kits;
             $sql = "select * from kits
-                    where id = '$idKits'";
+                    where id = $idKits";
             $kits = Conexion::query($sql);
             $nuevoKit = new Kits(['chip'=>$kits[0]->chip,'numero' => $kits[0]->numero,'remera'=>$kits[0]->remera,'medalla'=>$kits[0]->medalla]);
             $nuevoKit->setId($idKits);
@@ -55,6 +55,21 @@ class CarreraManager extends ArrayIdManager{
         foreach ($carreras as $carrera) {
             $carrera->mostrar();
         }    
+    }
+
+    //Muestra por pantalla los resultados de una carrera, se solicita el id de la carrera
+    public function mostrarResultadoCarrera(){
+        $id = Menu::readln("Ingrese número de la carrera para mostrar resultados:");
+        if ($this->existeId($id)){
+            $carrera = $this->getPorId($id);
+            //Muestra los datos de la carrera
+            $carrera->mostrar();
+            //Muestra los datos de cada participante
+            $carrera->mostrarResultado();
+        } else{
+            $id = Menu::readln("No existe el id de carrera para mostrar.");
+        }
+
     }
  
     //Dar de baja una carrera, se pide el id de la carrera a eliminar. Se elimina de la base de datos y del arreglo

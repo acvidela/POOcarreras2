@@ -36,6 +36,10 @@ class MenuAdmin extends Menu{
                 $opciones[4][1] = "Mostrar carreras";
                 $opciones[4][2] = array($carreraManager,"mostrarCarreras");
 
+                $opciones[5][0] = 5;
+                $opciones[5][1] = "Mostrar resultados carrera";
+                $opciones[5][2] = array($carreraManager,"mostrarResultadoCarrera");
+
                 self::menu($titulo,$opciones);
 
         }        

@@ -159,7 +159,7 @@ class Participante {
 
    //Imprime por pantalla un participante inscripto en una carrera
     public function mostrar(){
-        echo "ID: " . $this->getId() . "ID del atleta: " . $this->getIdAtleta(). ", Pago: " . $this->getPago() . ", Posición general: " . $this->getPosGeneral() .", Categoría: " . $this->getCategoria() . ", Posición en la categoría: " .$this->getPosCategoria();
+        echo "ID: " . $this->getId() . "ID del atleta: " . $this->getIdAtleta().  ", Posición general: " . $this->getPosGeneral() .", Categoría: " . $this->getCategoria() . ", Posición en la categoría: " .$this->getPosCategoria() . ", Pago: " . $this->getPago();
         echo(PHP_EOL);
     }
 

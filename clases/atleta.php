@@ -1,5 +1,5 @@
 <?php
-require_once 'conexion.php';
+require_once 'datos\conexion.php';
 
 class Atleta {
     private $id;

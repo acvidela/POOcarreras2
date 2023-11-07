@@ -1,7 +1,7 @@
 <?php
-require_once('menu.php');
-require_once('carrera.php');
-require_once('arrayIdManager.php');
+require_once('menues\menu.php');
+require_once('clases\carrera.php');
+require_once('clases\arrayIdManager.php');
 
 class CarreraManager extends ArrayIdManager{
     

@@ -1,6 +1,6 @@
 <?php
-require_once('menu.php');
-require_once('conexion.php');  
+require_once('menues\menu.php');
+require_once('datos\conexion.php');  
 
 //MAIN
 

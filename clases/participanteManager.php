@@ -1,6 +1,6 @@
 <?php
-require_once('participante.php');
-require_once('arrayIdManager.php');
+require_once('clases\participante.php');
+require_once('clases\arrayIdManager.php');
 
 class ParticipanteManager extends ArrayIdManager{
 
@@ -43,10 +43,11 @@ class ParticipanteManager extends ArrayIdManager{
     public function altaParticipante(){
         $idAtleta = Menu::readln("Ingrese el número de atleta a incribir: ");
         //Verifico que existe el atleta a inscribir
-        $sql = "SELECT id
-                FROM atletas
-                WHERE $idAtleta = id";
-        $atleta = Conexion::ejecutar($sql);
+        $sql = "select *
+                from atletas
+                where id = ". $idAtleta;
+        $atleta = Conexion::query($sql);
+
         if ($atleta != null){
             $categoria = Menu::readln("Ingrese en qué categoria desearía inscibirse: ");
             $participante = new Participante($this->idCarrera, $idAtleta, 0, 0,0,$categoria);

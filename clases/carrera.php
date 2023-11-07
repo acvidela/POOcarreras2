@@ -1,6 +1,6 @@
 <?php
-require_once('kits.php');
-require_once('participanteManager.php');
+require_once('clases\kits.php');
+require_once('clases\participanteManager.php');
 
 class Carrera {
 

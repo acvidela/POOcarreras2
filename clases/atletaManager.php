@@ -1,6 +1,6 @@
 <?php
-require_once('atleta.php');
-require_once('arrayIdManager.php');
+require_once('clases\atleta.php');
+require_once('clases\arrayIdManager.php');
 
 class AtletaManager extends ArrayIdManager{
 

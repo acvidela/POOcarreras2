@@ -1,7 +1,7 @@
 <?php
 require_once('menu.php');
-require_once('carreraManager.php');
-require_once('atletaManager.php');
+require_once('clases\carreraManager.php');
+require_once('clases\atletaManager.php');
   
 class MenuAdmin extends Menu{
       

@@ -1,11 +1,12 @@
 <?php
 require_once('clases\atleta.php');
-require_once('clases\arrayIdManager.php');
+require_once('lib\arrayIdManager.php');
+require_once('lib\ABMinterface.php');
 
-class AtletaManager extends ArrayIdManager{
+class AtletaManager extends ArrayIdManager implements ABMinterface{
 
     //De la base de datos levanta los atletas y los agrega al arreglo para manipularlos
-    protected function levantarAtletas(){
+    public function levantar(){
         $sql = "select * 
                 from atletas";
         $atletas = Conexion::query($sql);
@@ -23,13 +24,13 @@ class AtletaManager extends ArrayIdManager{
     
     //Crea el arreglo de Carreras a partir de los datos de la base de datos
     public function __construct() {
-        $this->levantarAtletas();
+        $this->levantar();
     }
     
     /*
     /   Guarda el atleta en la base de datos y le setea el id generado por la base de datos al insertarlo
     */
-    public function altaAtleta() {
+    public function alta() {
         $nombre = Menu::readln("Ingrese nombre y apellido: ");
         $email = Menu::readln("Ingrese email: ");
         $fechaNacimiento =  Menu::readln("Ingrese fecha de nacimiento, con el formato dd/mm/yyyy: ");
@@ -42,7 +43,7 @@ class AtletaManager extends ArrayIdManager{
     }
 
     //Dar de baja un atleta, se pide el id del atleta a eliminar. Se elimina de la base de datos y del arreglo
-    public function bajaAtleta(){
+    public function baja(){
         $id = Menu::readln("Ingrese número del atleta a eliminar:");
         if ($this->existeId($id)){
             $atleta = $this->getPorId($id);
@@ -56,7 +57,7 @@ class AtletaManager extends ArrayIdManager{
     }
     
     // Actualizar los datos de un atleta por su ID
-    public function modificaAtleta() {
+    public function modificacion() {
 	    $id = Menu::readln("Ingrese Id de atleta a modificar: ");
         if($this->existeId($id)){
             $atletaModificado = $this->getPorId($id);         	   
@@ -90,8 +91,5 @@ class AtletaManager extends ArrayIdManager{
         }
         echo(PHP_EOL);
     }
-
-    
-
 }
 

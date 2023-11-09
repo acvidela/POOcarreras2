@@ -1,12 +1,13 @@
 <?php
 require_once('menues\menu.php');
 require_once('clases\carrera.php');
-require_once('clases\arrayIdManager.php');
+require_once('lib\arrayIdManager.php');
+require_once('lib\ABMinterface.php');
 
-class CarreraManager extends ArrayIdManager{
+class CarreraManager extends ArrayIdManager implements ABMinterface{
     
 	//De la base de datos levanta las carreras y los kits de cada una y los agrega al arreglo para manipularlos
-    protected function levantarCarreras(){
+    public function levantar(){
         $sql = "select * from carreras";
         $carreras = Conexion::query($sql);
         
@@ -30,12 +31,12 @@ class CarreraManager extends ArrayIdManager{
     public function __construct()
     {
        $this->arreglo = [];
-       $this->levantarCarreras();
+       $this->levantar();
     }
 
 
     // Actualizar los datos de un carrera por su ID
-    public function actualizarCarrera($id, $nombre, $circuito,$fecha,$precio,$kits) {
+    public function actualizar($id, $nombre, $circuito,$fecha,$precio,$kits) {
 	 	$carreras = $this->getArreglo();        
       	foreach ($carreras as $carrera) {
       	   if ($carrera->getId() === $id) {
@@ -87,7 +88,7 @@ class CarreraManager extends ArrayIdManager{
     }
 
     //Dar de baja una carrera, se pide el id de la carrera a eliminar. Se elimina de la base de datos y del arreglo
-    public function bajaCarrera(){
+    public function baja(){
         $id = Menu::readln("Ingrese número de la carrera a eliminar: ");
         if ($this->existeId($id)){
             $carrera = $this->getPorId($id);
@@ -99,7 +100,7 @@ class CarreraManager extends ArrayIdManager{
     }
 
     //Dar de alta una carrera  $id,$nombre,$circuito,$fecha,$precio,$kits
-    public function altaCarrera(){
+    public function alta(){
         $nombre = Menu::readln("Ingrese nombre carrera: ");
         $circuito = Menu::readln("Ingrese circuito: ");
         $fecha = Menu::readln("Ingrese fecha de carrera, con el formato dd/mm/yyyy: ");
@@ -161,7 +162,7 @@ class CarreraManager extends ArrayIdManager{
     }
 
     //Modificar una carrera $id,$nombre,$circuito,$fecha,$precio,$kits
-    public function modificaCarrera(){
+    public function modificacion(){
         $id = Menu::readln("Ingrese Id de carrera a modificar: ");
         if($this->existeId($id)){
             $carreraModificado = $this->getPorId($id);         	   
@@ -188,8 +189,7 @@ class CarreraManager extends ArrayIdManager{
             $carreraModificado->setKits($kits);
             $carreraModificado->update();
             
-            $this->modificar($carreraModificado);
-    }else {
+        }else {
         Menu::writeln("El id ingresado no se encuentra entre nuestras carreras");
     }
     }
@@ -200,7 +200,7 @@ class CarreraManager extends ArrayIdManager{
             $carrera = $this->getPorId($id);
             $participantes = $carrera->getParticipantes();
             //Agrega en el arreglo/tabla de particpantes uno nuevo en la carrera deseada
-            $participantes->altaParticipante();
+            $participantes->alta();
         }
         else{
             $id = Menu::readln("No existe el id de carrera ingresado.");

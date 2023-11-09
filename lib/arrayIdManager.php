@@ -48,4 +48,6 @@ abstract class ArrayIdManager {
             $this->arreglo[$id] = $elementoModificado;
         }
     } 
+
+    public abstract function mostrar();
 }

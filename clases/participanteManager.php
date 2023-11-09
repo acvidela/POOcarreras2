@@ -1,13 +1,14 @@
 <?php
 require_once('clases\participante.php');
-require_once('clases\arrayIdManager.php');
+require_once('lib\arrayIdManager.php');
+require_once('lib\ABMinterface.php');
 
-class ParticipanteManager extends ArrayIdManager{
+class ParticipanteManager extends ArrayIdManager implements ABMinterface{
 
     private $idCarrera;
 
     //De la base de datos levanta todos los participantes inscriptos en una carrera y los agrega al arreglo para manipularlos
-    protected function levantarParticipantes(){
+    public function levantar(){
         $idCarrera = $this->idCarrera;
         $sql = "select * from participantes
                 where id_carrera = ".$idCarrera;
@@ -27,20 +28,21 @@ class ParticipanteManager extends ArrayIdManager{
     {
        $this->arreglo = [];
        $this->idCarrera = $idCarrera;
-       $this->levantarParticipantes();
+       $this->levantar();
     }
             
     
     //Muestra los participantes y resultados de una carrera en particular
     public function mostrar(){
         $participantes = $this->getArreglo();
+        Menu::subtitulo("Participantes inscriptos en la carrera");
         foreach ($participantes as $participante) {
             $participante->mostrar();
         }
     }    
     
     //Inscribe un participante en la carrera, creándolo e ingresándolo en DB
-    public function altaParticipante(){
+    public function alta(){
         $idAtleta = Menu::readln("Ingrese el número de atleta a incribir: ");
         //Verifico que existe el atleta a inscribir
         $sql = "select *
@@ -60,7 +62,7 @@ class ParticipanteManager extends ArrayIdManager{
    
 
     //Dar de baja un participante de una carrera, se pide el id del participante a eliminar. Se elimina de la base de datos y del arreglo
-    public function bajaAtleta(){
+    public function baja(){
         $id = Menu::readln("Ingrese número del atleta a eliminar:");
         if ($this->existeId($id)){
             $atleta = $this->getPorId($id);
@@ -72,7 +74,7 @@ class ParticipanteManager extends ArrayIdManager{
     }
     
     // Actualizar los datos de un participante por su ID
-    public function modificaParticipante() {
+    public function modificacion() {
 	    $idAtleta = Menu::readln("Ingrese Id de atleta a modificar: ");
         //Verifico que existe, ya está inscripto
         $participantes = $this->getArreglo();
@@ -101,38 +103,16 @@ class ParticipanteManager extends ArrayIdManager{
 
                     $participante->update();
                     $this->agregar($participante);
+                    return;
                 }else {
                     Menu::writeln("El id ingresado no se encuentra inscripto");
                 }
             }    
         }
+        Menu::writeln("El id ingresado no se encuentra inscripto");
     }
         
-       
-    // Mostrar por pantalla todos los atletas
-	public function mostrarAtletas(){
-		$atletas = $this->getArreglo();
-		foreach ($atletas as $atleta) {
-	    	$atleta->mostrar();
-   	 	echo(PHP_EOL);
-      }
-      echo(PHP_EOL);
-   }
 
-    /*
-    /   Guarda el atleta en la base de datos y le setea el id generado por la base de datos al insertarlo
-    */
-    public function altaAtleta() {
-        $nombre = Menu::readln("Ingrese nombre y apellido: ");
-        $email = Menu::readln("Ingrese email: ");
-        $fechaNacimiento =  Menu::readln("Ingrese fecha de nacimiento, con el formato dd/mm/yyyy: ");
-    
-        $atleta = new Atleta($nombre,$email,$fechaNacimiento);
-        $atleta->save();
-
-        $this->agregar($atleta);
-   
-    }
 
 }
 

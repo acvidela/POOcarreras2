@@ -28,15 +28,15 @@ class MenuAdmin extends Menu{
 
                 $opciones[1][0] = 1;
                 $opciones[1][1] = "Alta carrera";
-                $opciones[1][2] = array($this->carreraManager,"altaCarrera");
+                $opciones[1][2] = array($this->carreraManager,"alta");
 
                 $opciones[2][0] = 2;
                 $opciones[2][1] = "Baja carrera";
-                $opciones[2][2] = array($this->carreraManager,"bajaCarrera");
+                $opciones[2][2] = array($this->carreraManager,"baja");
 
                 $opciones[3][0] = 3;
                 $opciones[3][1] = "Modificar carrera";
-                $opciones[3][2] = array($this->carreraManager,"modificaCarrera");
+                $opciones[3][2] = array($this->carreraManager,"modificacion");
 
                 $opciones[4][0] = 4;
                 $opciones[4][1] = "Mostrar carreras";
@@ -61,15 +61,15 @@ class MenuAdmin extends Menu{
 
                 $opciones[1][0] = 1;
                 $opciones[1][1] = "Alta atleta";
-                $opciones[1][2] = array($this->atletaManager,"altaAtleta");
+                $opciones[1][2] = array($this->atletaManager,"alta");
 
                 $opciones[2][0] = 2;
                 $opciones[2][1] = "Baja atleta";
-                $opciones[2][2] = array($this->atletaManager,"bajaAtleta");
+                $opciones[2][2] = array($this->atletaManager,"baja");
 
                 $opciones[3][0] = 3;
                 $opciones[3][1] = "Modificar atleta";
-                $opciones[3][2] = array($this->atletaManager,"modificaAtleta");
+                $opciones[3][2] = array($this->atletaManager,"modificacion");
 
                 $opciones[4][0] = 4;
                 $opciones[4][1] = "Mostrar atletas";

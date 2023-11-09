@@ -253,7 +253,7 @@ class Carrera {
 
     public function modificarParticipante(){
         $participantes = $this->getParticipantes();
-        $participantes->modificaParticipante(); 
+        $participantes->modificacion(); 
     }
 
 }

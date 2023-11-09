@@ -44,6 +44,12 @@ class Menu{
         self::writeln("");
     }
 
+    public static function subtitulo($subtitulo){
+        echo PHP_EOL;
+        self::writeln($subtitulo);
+        self::writeln(str_repeat('-', mb_strlen($subtitulo)));
+    }
+
     protected function exit(){
         return 1;   
     }

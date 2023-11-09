@@ -11,7 +11,7 @@ $menu->pantallaBienvenida('Es-Tan-Dil');
 
 $db = Conexion::getConexion();
  
-$menu->elegirUsuario();  //0 salir, 1 participante, 2 administrador
+$menu->operacionesAdmin();  //0 salir, 1 carreras, 2 atletas, 3 inscripciones
 
 $menu->pantallaDespedida();
 

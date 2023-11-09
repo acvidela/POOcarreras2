@@ -97,7 +97,7 @@ class Menu{
 
         $opciones[2][0] = 2;
         $opciones[2][1] = "Administrador";
-        $opciones[2][2] = array($this,"menuAdmin");
+        $opciones[2][2] = array($this,"operacionesAdmin");
 
         self::menu($titulo,$opciones);
     }
@@ -106,7 +106,7 @@ class Menu{
         self::writeln("Operaciones del participante");
     }
     
-    private function menuAdmin(){
+    public function operacionesAdmin(){
         $menuAdmin = new MenuAdmin();
         $menuAdmin->operacionesAdmin();
     }

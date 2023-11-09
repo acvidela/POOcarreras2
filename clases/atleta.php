@@ -33,10 +33,9 @@ class Atleta {
     protected function getFechaNacimiento(){
         return $this->fechaNacimiento;
     }
-
+    //Calcula la edad del atleta a partir de la fecha de nacimiento
     public function getEdad(){
-       // Obtener la fecha de nacimiento y convertirla a un objeto DateTime
-        $fechaNacimiento = new DateTime($this->getFechaNacimiento());
+        $fechaNacimiento = new DateTime($this->getFechaNacimiento());    // Obtener la fecha de nacimiento y convertirla a un objeto DateTime
         $ahora = new DateTime('now'); //Fecha de hoy
         $diferencia = $ahora->diff($fechaNacimiento);  //Calcular la diferencia de hoy con la fecha de nacimiento
         return $diferencia->format("%y"); //Expresar la diferencia en años, para dar la edad
@@ -51,7 +50,11 @@ class Atleta {
     }
 
     public function setFechaNacimiento($fechaNacimiento){
-        $this->fechaNacimiento = $fechaNacimiento;      
+        if (is_string($fechaNacimiento)){
+            $this->fechaNacimiento = date("Y-m-d H:i:s", strtotime($fechaNacimiento));
+        } else{
+            $this->fechaNacimiento = $fechaNacimiento;       
+        }       
     }
 
     /**
@@ -68,9 +71,13 @@ class Atleta {
 
     //Muestra por pantalla un atleta
     public function mostrar(){
-        echo "ID: " . $this->getId() . ", Nombre: " . $this->getNombre() . ", Email: " . $this->getEmail() . ", Edad: " . $this->getEdad();
+        echo "ID: " . $this->getId() 
+            . ", Nombre: " . $this->getNombre() 
+            . ", Email: " . $this->getEmail() 
+            . ", Edad: " . $this->getEdad();
     }
 
+    //Guarda en la base de datos
     public function save(){
         $nombre = $this->getNombre();
         $email = $this->getEmail();
@@ -92,7 +99,7 @@ class Atleta {
             Conexion::ejecutar($sql);
         }
 
-             /*
+    /*
     /   Modifica al atleta en la base de datos
     */
     public function update() {

@@ -40,7 +40,7 @@ class MenuAdmin extends Menu{
 
                 $opciones[4][0] = 4;
                 $opciones[4][1] = "Mostrar carreras";
-                $opciones[4][2] = array($this->carreraManager,"mostrarCarreras");
+                $opciones[4][2] = array($this->carreraManager,"mostrar");
 
                 self::menu($titulo,$opciones);
 
@@ -73,7 +73,7 @@ class MenuAdmin extends Menu{
 
                 $opciones[4][0] = 4;
                 $opciones[4][1] = "Mostrar atletas";
-                $opciones[4][2] = array($this->atletaManager,"mostrarAtletas");
+                $opciones[4][2] = array($this->atletaManager,"mostrar");
                
                 self::menu($titulo,$opciones);
 
@@ -103,20 +103,7 @@ class MenuAdmin extends Menu{
                 $opciones[3][1] = "Modificar participación";
                 $opciones[3][2] = array($this->carreraManager,"modificarParticipante");
         
-                /*
-                $opciones[3][0] = 3;
-                $opciones[3][1] = "Modificar atleta";
-                $opciones[3][2] = array($this->atletaManager,"modificaAtleta");
-        
-                $opciones[4][0] = 4;
-                $opciones[4][1] = "Mostrar atletas";
-                $opciones[4][2] = array($this->atletaManager,"mostrarAtletas");
-        
-                $opciones[5][0] = 5;
-                $opciones[5][1] = "Inscribir participante";
-                $opciones[5][2] = 
-        
-        */
+                
                 self::menu($titulo,$opciones);
         
         }
@@ -130,7 +117,7 @@ class MenuAdmin extends Menu{
                 //0 volver, 1 carreras, 2 atletas, 3 participantes
 
                 $opciones[0][0]= 0;
-                $opciones[0][1] = "Volver al menu anterior";
+                $opciones[0][1] = "Salir del sistema";
                 $opciones[0][2] = array($this, "exit");  //Llamar a la función exit de esta clase
 
                 $opciones[1][0] = 1;

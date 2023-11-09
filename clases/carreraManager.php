@@ -50,8 +50,9 @@ class CarreraManager extends ArrayIdManager{
     }
     
     //Muestra por pantalla todas las carreras
-    public function mostrarCarreras(){
+    public function mostrar(){
 	    $carreras = self::getArreglo();
+        Menu::subtitulo('Lista de carreras en nuestro sistema');
         foreach ($carreras as $carrera) {
             $carrera->mostrar();
         }    
@@ -87,7 +88,7 @@ class CarreraManager extends ArrayIdManager{
 
     //Dar de baja una carrera, se pide el id de la carrera a eliminar. Se elimina de la base de datos y del arreglo
     public function bajaCarrera(){
-        $id = Menu::readln("Ingrese número de la carrera a eliminar:");
+        $id = Menu::readln("Ingrese número de la carrera a eliminar: ");
         if ($this->existeId($id)){
             $carrera = $this->getPorId($id);
             $carrera->delete();

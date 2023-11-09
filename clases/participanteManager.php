@@ -63,7 +63,7 @@ class ParticipanteManager extends ArrayIdManager implements ABMinterface{
 
     //Dar de baja un participante de una carrera, se pide el id del participante a eliminar. Se elimina de la base de datos y del arreglo
     public function baja(){
-        $id = Menu::readln("Ingrese número del atleta a eliminar:");
+        $id = Menu::readln("Ingrese número del atleta a eliminar: ");
         if ($this->existeId($id)){
             $atleta = $this->getPorId($id);
             $atleta->delete();

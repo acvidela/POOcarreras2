@@ -196,10 +196,3 @@ class Kits {
 
 }
 
-/*
-//Main para probar
-$k1 = new Kits(null);
-$k1->mostrar();
-$k2 = new Kits(["medalla"=>true,"remera"=>true]);
-$k2->mostrar();
-*/

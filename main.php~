@@ -1,6 +1,6 @@
 <?php
 require_once('menues' . DIRECTORY_SEPARATOR . 'menu.php');
-require_once('datos' . DIRECTORY_SEPARATOR . 'conexion.php');  
+require_once('datos' DIRECTORY_SEPARATOR . 'conexion.php');  
 
 //MAIN
 

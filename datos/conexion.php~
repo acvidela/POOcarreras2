@@ -9,8 +9,8 @@
             $nombreArchivo = 'datos' . DIRECTORY_SEPARATOR . 'base.json';
             if (is_readable($nombreArchivo)){
                 $datos = file_get_contents($nombreArchivo);
+               return $datos;
                 $datos = json_decode($datos);
-                return $datos;
             }
             return null;
         }

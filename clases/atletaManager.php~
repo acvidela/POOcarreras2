@@ -1,7 +1,7 @@
 <?php
-require_once('clases' . DIRECTORY_SEPARATOR . 'atleta.php');
-require_once('lib' . DIRECTORY_SEPARATOR . 'arrayIdManager.php');
-require_once('lib' . DIRECTORY_SEPARATOR . 'ABMinterface.php');
+require_once('clases' DIRECTORY_SEPARATOR . 'atleta.php');
+require_once('lib' DIRECTORY_SEPARATOR . 'arrayIdManager.php');
+require_once('lib' DIRECTORY_SEPARATOR . 'ABMinterface.php');
 
 class AtletaManager extends ArrayIdManager implements ABMinterface{
 

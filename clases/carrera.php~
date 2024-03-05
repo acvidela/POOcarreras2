@@ -1,6 +1,6 @@
 <?php
-require_once('clases' . DIRECTORY_SEPARATOR . 'kits.php');
-require_once('clases' . DIRECTORY_SEPARATOR . 'participanteManager.php');
+require_once('clases' DIRECTORY_SEPARATOR . 'kits.php');
+require_once('clases' DIRECTORY_SEPARATOR . 'participanteManager.php');
 
 class Carrera {
 

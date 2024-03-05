@@ -1,8 +1,8 @@
 <?php
-require_once('menues' . DIRECTORY_SEPARATOR . 'menu.php');
-require_once('clases' . DIRECTORY_SEPARATOR . 'carrera.php');
-require_once('lib' . DIRECTORY_SEPARATOR . 'arrayIdManager.php');
-require_once('lib' . DIRECTORY_SEPARATOR . 'ABMinterface.php');
+require_once('menues' DIRECTORY_SEPARATOR . 'menu.php');
+require_once('clases' DIRECTORY_SEPARATOR . 'carrera.php');
+require_once('lib' DIRECTORY_SEPARATOR . 'arrayIdManager.php');
+require_once('lib' DIRECTORY_SEPARATOR . 'ABMinterface.php');
 
 class CarreraManager extends ArrayIdManager implements ABMinterface{
     

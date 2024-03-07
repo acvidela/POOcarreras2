@@ -130,6 +130,9 @@ class ParticipanteManager extends ArrayIdManager implements ABMinterface{
 	    //$idAtleta = Menu::readln("Ingrese Id de atleta a modificar: ");
         //Cargo todos los participantes de la carrera
         $tamanio = $this->tamanio();
+        //Para contabilizar las categorias
+        $M = 0;
+        $F = 0;
         $participantes = $this->getArreglo();
         for ($pos = 1; $pos <= $tamanio ; $pos++) { 
             $idParticipante = Menu::readln("Ingrese id del participante (dorsal) que llegó en posición: " . $pos . " "); 
@@ -138,8 +141,15 @@ class ParticipanteManager extends ArrayIdManager implements ABMinterface{
                 $participante = $this->getPorId($idParticipante);
                 $participante->setFinalizo(true);
                 $participante->setPosGeneral($pos);
+                if ($participante->getCategoria() == "F"){
+                    $F++;
+                    $participante->setPosCategoria($F);
+                } else {
+                    $M++;
+                    $participante->setPosCategoria($M);
+                }
                 $participante->update();
-                $this->agregar($participante);
+                //$this->agregar($participante);
             } else {
                 Menu::writeln("El id ingresado no se encuentra inscripto");
             }

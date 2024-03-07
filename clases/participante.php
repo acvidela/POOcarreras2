@@ -186,7 +186,7 @@ class Participante {
         $categoria = $this->getCategoria();
         $finalizo = $this->getFinalizo();
         $sql = "INSERT INTO participantes (id_carrera, id_atleta, pago, pos_general, pos_categoria, categoria, finalizo)
-                VALUES ($idCarrera, $idAtleta, $pago, $posGeneral, $posCategoria, '$categoria', $finalizo)";
+                VALUES ($idCarrera, $idAtleta, $pago, $posGeneral, $posCategoria, '$categoria', false)";
 
         Conexion::ejecutar($sql);
 

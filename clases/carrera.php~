@@ -1,6 +1,6 @@
 <?php
-require_once('clases' DIRECTORY_SEPARATOR . 'kits.php');
-require_once('clases' DIRECTORY_SEPARATOR . 'participanteManager.php');
+require_once('clases' . DIRECTORY_SEPARATOR . 'kits.php');
+require_once('clases' . DIRECTORY_SEPARATOR . 'participanteManager.php');
 
 class Carrera {
 
@@ -155,17 +155,22 @@ class Carrera {
     }
 
 
-    //Operaciones en la Base de Datos
-
-    //Imprime por pantalla una carrera
+    //Imprime por pantalla los datos de una carrera
     public function mostrar(){
         echo "ID: " . $this->getId() . ", Nombre: " . $this->getNombre() . ", Circuito: " . $this->getCircuito() .", Fecha: " . $this->getFecha() . ", Precio: " .$this->getPrecio();
         echo(PHP_EOL);
         $this->getKits()->mostrar();
         echo(PHP_EOL);
     }
-
+    
+	//Imprime por pantalla los resultados de la carrera    
+    public function mostrarResultado($atletas){
+        $participantes = $this->getParticipantes();
+        $participantes->mostrarCombinado($atletas); 
+    }
       
+    //Operaciones en la Base de Datos
+    
     /*
     /   Guarda la carrera en la base de datos y le setea el id generado por la base de datos al insertarlo
     */
@@ -246,10 +251,6 @@ class Carrera {
         return $this->participantes;
     }
 
-    public function mostrarResultado(){
-        $participantes = $this->getParticipantes();
-        $participantes->mostrar(); 
-    }
 
     public function modificarParticipante(){
         $participantes = $this->getParticipantes();

@@ -15,7 +15,7 @@ class ParticipanteManager extends ArrayIdManager implements ABMinterface{
         $participantes = Conexion::query($sql);
         
         foreach ($participantes as $participante){
-            $nuevoParticipante = new Participante($participante->id_carrera, $participante->id_atleta, $participante->pago, $participante->pos_general, $participante->pos_categoria, $participante->categoria);
+            $nuevoParticipante = new Participante($participante->id_carrera, $participante->id_atleta, $participante->pago, $participante->pos_general, $participante->pos_categoria, $participante->categoria, $participante->finalizo);
             $nuevoParticipante->setId($participante->id);
             
             $this->agregar($nuevoParticipante);
@@ -31,13 +31,21 @@ class ParticipanteManager extends ArrayIdManager implements ABMinterface{
        $this->levantar();
     }
             
-    
-    //Muestra los participantes y resultados de una carrera en particular
+    //Muestra los participantes  de una carrera en particular
     public function mostrar(){
         $participantes = $this->getArreglo();
         Menu::subtitulo("Participantes inscriptos en la carrera");
         foreach ($participantes as $participante) {
             $participante->mostrar();
+        }
+    }
+    
+    //Muestra los participantes y resultados de una carrera en particular, combinando la información con los arreglos
+    public function mostrarCombinado($atletas){
+        $participantes = $this->getArreglo();
+        Menu::subtitulo("Participantes inscriptos en la carrera");
+        foreach ($participantes as $participante) {
+            $participante->mostrarCombinado($atletas);
         }
     }    
     
@@ -52,7 +60,7 @@ class ParticipanteManager extends ArrayIdManager implements ABMinterface{
 
         if ($atleta != null){
             $categoria = Menu::readln("Ingrese en qué categoria desearía inscibirse: ");
-            $participante = new Participante($this->idCarrera, $idAtleta, 0, 0,0,$categoria);
+            $participante = new Participante($this->idCarrera, $idAtleta, 0, 0,0,$categoria,false);
             $participante->save();
             $this->agregar($participante);
         } else{
@@ -61,9 +69,9 @@ class ParticipanteManager extends ArrayIdManager implements ABMinterface{
     }
    
 
-    //Dar de baja un participante de una carrera, se pide el id del participante a eliminar. Se elimina de la base de datos y del arreglo
+    //Dar de baja un participante de una carrera, se pide el id del participante a eliminar(el número en esa carrera) . Se elimina de la base de datos y del arreglo
     public function baja(){
-        $id = Menu::readln("Ingrese número del atleta a eliminar: ");
+        $id = Menu::readln("Ingrese número del participante (dorsal) a eliminar: ");
         if ($this->existeId($id)){
             $atleta = $this->getPorId($id);
             $atleta->delete();
@@ -75,7 +83,7 @@ class ParticipanteManager extends ArrayIdManager implements ABMinterface{
     
     // Actualizar los datos de un participante por su ID
     public function modificacion() {
-	    $idAtleta = Menu::readln("Ingrese Id de atleta a modificar: ");
+	    $idAtleta = Menu::readln("Ingrese Id del atleta a modificar: ");
         //Verifico que existe, ya está inscripto
         $participantes = $this->getArreglo();
         foreach ($participantes as $participante){
@@ -92,26 +100,52 @@ class ParticipanteManager extends ArrayIdManager implements ABMinterface{
                     if ($pago != ""){
                         $participante->setPago($pago);
                     }
-                    $posGeneral = Menu::readln("Ingrese posición general: ");
-                    if ($posGeneral != ""){
-                        $participante->setPosGeneral($posGeneral);
+                    $finalizo = Menu::readln("¿Finalizó la carrera? Y/N: ");
+                    if ($finalizo  == "Y" || $finalizo=="y"){
+                        $participante->setFinalizo(true);
+                        $posGeneral = Menu::readln("Ingrese posición general: ");
+                        if ($posGeneral != ""){
+                            $participante->setPosGeneral($posGeneral);
+                        }
+                        $posCategoria = Menu::readln("Ingrese posición en la categoría: ");
+                        if ($posGeneral != ""){
+                            $participante->setPosCategoria($posCategoria);
+                        }
+                    } else {
+                        $participante->setFinalizo(false);
+                        $participante->setPosGeneral(0);
+                        $participante->setPosCategoria(0); 
                     }
-                    $posCategoria = Menu::readln("Ingrese posición en la categoría: ");
-                    if ($posGeneral != ""){
-                        $participante->setPosCategoria($posCategoria);
-                    }
-
-                    $participante->update();
-                    $this->agregar($participante);
-                    return;
-                }else {
-                    Menu::writeln("El id ingresado no se encuentra inscripto");
                 }
-            }    
-        }
+                $participante->update();
+                $this->agregar($participante);
+                return;
+            }
+        }    
         Menu::writeln("El id ingresado no se encuentra inscripto");
     }
         
+    // Cargar datos resultados carrera general por posición
+    public function ingresarResultadosCarrera() {
+	    //$idAtleta = Menu::readln("Ingrese Id de atleta a modificar: ");
+        //Cargo todos los participantes de la carrera
+        $tamanio = $this->tamanio();
+        $participantes = $this->getArreglo();
+        for ($pos = 1; $pos <= $tamanio ; $pos++) { 
+            $idParticipante = Menu::readln("Ingrese id del participante (dorsal) que llegó en posición: " . $pos . " "); 
+            
+            if ($this->existeId($idParticipante)){
+                $participante = $this->getPorId($idParticipante);
+                $participante->setFinalizo(true);
+                $participante->setPosGeneral($pos);
+                $participante->update();
+                $this->agregar($participante);
+            } else {
+                Menu::writeln("El id ingresado no se encuentra inscripto");
+            }
+        }    
+       
+    }
 
 
 }

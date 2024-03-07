@@ -1,22 +1,20 @@
 <?php
 class Participante {
-    private $id;  //Este número será el dorsal del atleta, el número que llevará en esa carrera. (Un atleta puede tener varios)
+    private $id;
     private $idCarrera;
-    private $idAtleta;  //Este identificador es de un atleta, la persona, para todas las carreras en las que participa
+    private $idAtleta;
     private $pago = 0.0;
     private $posGeneral = 0;
     private $posCategoria = 0;
     private $categoria;
-    private $finalizo =  false;
 
-    public function __construct($idCarrera, $idAtleta, $pago, $posGeneral, $posCategoria, $categoria, $finalizo) {
+    public function __construct($idCarrera, $idAtleta, $pago, $posGeneral, $posCategoria, $categoria) {
         $this->idCarrera = $idCarrera;
         $this->idAtleta = $idAtleta;
         $this->pago = $pago;
         $this->posGeneral = $posGeneral;
         $this->posCategoria = $posCategoria;
         $this->categoria = $categoria;
-        $this->finalizo = $finalizo;
     }
 
     /**
@@ -159,14 +157,9 @@ class Participante {
         return $this;
     }
 
-   //Imprime por pantalla un participante inscripto en una carrera,  
-    public function mostrarCombinado($atletas){
-        if ($this->getFinalizo()){ 
-            $atleta = $atletas->getPorId($this->getIdAtleta());
-            echo "Dorsal del atleta: " . $this->getId() . ", corresponde al atleta: " .  $atleta->getNombre().  ", Posición general: " . $this->getPosGeneral() .", Categoría: " . $this->getCategoria() . ", Posición en la categoría: " .$this->getPosCategoria();
-        } else{
-            echo "Dorsal del atleta: " . $this->getId() . ", corresponde al atleta: " .  $this->getIdAtleta(). ", No finalizó la carrera";
-        }
+   //Imprime por pantalla un participante inscripto en una carrera
+    public function mostrar(){
+        echo " ID del atleta: " . $this->getIdAtleta().  ", Posición general: " . $this->getPosGeneral() .", Categoría: " . $this->getCategoria() . ", Posición en la categoría: " .$this->getPosCategoria() . ", Pago: " . $this->getPago();
         echo(PHP_EOL);
     }
 
@@ -184,9 +177,8 @@ class Participante {
         $posGeneral = $this->getPosGeneral();
         $posCategoria = $this->getPosCategoria();
         $categoria = $this->getCategoria();
-        $finalizo = $this->getFinalizo();
-        $sql = "INSERT INTO participantes (id_carrera, id_atleta, pago, pos_general, pos_categoria, categoria, finalizo)
-                VALUES ($idCarrera, $idAtleta, $pago, $posGeneral, $posCategoria, '$categoria', $finalizo)";
+        $sql = "INSERT INTO participantes (id_carrera, id_atleta, pago, pos_general, pos_categoria, categoria)
+                VALUES ($idCarrera, $idAtleta, $pago, $posGeneral, $posCategoria, '$categoria')";
 
         Conexion::ejecutar($sql);
 
@@ -216,43 +208,20 @@ class Participante {
         $posGeneral = $this->getPosGeneral();
         $posCategoria = $this->getPosCategoria();
         $categoria = $this->getCategoria();
-        $finalizo = $this->getFinalizo();
                 
         $sql = "UPDATE participantes
         SET pago = :pago,
             pos_general = :posGeneral,
             pos_categoria = :posCategoria,
-            categoria = :categoria,
-            finalizo = :finalizo
+            categoria = :categoria
         WHERE id = $id";
          
         $stmt = Conexion::prepare($sql);
         $stmt->bindParam(':pago', $pago, PDO::PARAM_INT);
         $stmt->bindParam(':posGeneral', $posGeneral, PDO::PARAM_INT);
         $stmt->bindParam(':posCategoria', $posCategoria, PDO::PARAM_INT); 
-        $stmt->bindParam(':categoria', $categoria, PDO::PARAM_STR);
-        $stmt->bindParam(':finalizo', $finalizo, PDO::PARAM_BOOL);
+        $stmt->bindParam(':categoria', $categoria, PDO::PARAM_STR); 
 
         $stmt->execute();
     }
-
-        /**
-         * Get the value of finalizo
-         */ 
-        public function getFinalizo()
-        {
-                return $this->finalizo;
-        }
-
-        /**
-         * Set the value of finalizo
-         *
-         * @return  self
-         */ 
-        public function setFinalizo($finalizo)
-        {
-                $this->finalizo = $finalizo;
-
-                return $this;
-        }
 }

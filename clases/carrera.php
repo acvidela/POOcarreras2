@@ -169,6 +169,30 @@ class Carrera {
         $participantes->mostrarCombinado($atletas); 
     }
       
+      
+        /**
+     * Get the value of participantes
+     * Levanta los participantes de la base de datos para esa carrera
+     */ 
+    public function getParticipantes()
+    {
+        if (!isset($this->participantes)){
+            $this->participantes = new ParticipanteManager($this->id);
+        }
+        return $this->participantes;
+    }
+
+
+    public function modificarParticipante(){
+        $participantes = $this->getParticipantes();
+        $participantes->modificacion(); 
+    }
+    
+     public function ingresarResultadosCarrera(){
+        $participantes = $this->getParticipantes();
+        $participantes->ingresarResultadosCarrera();
+    } 
+     
     //Operaciones en la Base de Datos
     
     /*
@@ -239,22 +263,7 @@ class Carrera {
     }
 
  
-    /**
-     * Get the value of participantes
-     * Levanta los participantes de la base de datos para esa carrera
-     */ 
-    public function getParticipantes()
-    {
-        if (!isset($this->participantes)){
-            $this->participantes = new ParticipanteManager($this->id);
-        }
-        return $this->participantes;
-    }
 
 
-    public function modificarParticipante(){
-        $participantes = $this->getParticipantes();
-        $participantes->modificacion(); 
-    }
 
 }

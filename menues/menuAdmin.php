@@ -85,7 +85,7 @@ class MenuAdmin extends Menu{
         
                 $opciones = [];
         
-                //0 volver, 1 mostrar, inscribir, 
+                //0 volver, 1 mostrar, 2 inscribir, 3 modificar, 4 cargar resultados
         
                 $opciones[0][0]= 0;
                 $opciones[0][1] = "Volver al menu anterior";
@@ -104,7 +104,10 @@ class MenuAdmin extends Menu{
                 $opciones[3][1] = "Modificar participación";
                 $opciones[3][2] = array($this->carreraManager,"modificarParticipante");
         
-                
+                $opciones[4][0] = 4;
+                $opciones[4][1] = "Cargar resultados carrera";
+                $opciones[4][2] = array($this->carreraManager,"ingresarResultadosCarrera");
+
                 self::menu($titulo,$opciones);
         
         }

@@ -59,7 +59,21 @@ class CarreraManager extends ArrayIdManager implements ABMinterface{
         }    
     }
 
-    //Muestra por pantalla los resultados de una carrera, se solicita el id de la carrera
+     //Muestra por pantalla los resultados de una carrera, se solicita el id de la carrera
+    public function mostrarResultadoCarrera($atletas){
+        $id = Menu::readln("Ingrese número de la carrera para mostrar resultados: ");
+        if ($this->existeId($id)){
+            $carrera = $this->getPorId($id);
+            //Muestra los datos de la carrera
+            $carrera->mostrar();
+            //Muestra los datos de cada participante
+            $carrera->mostrarResultado($atletas);
+        } else{
+            $id = Menu::readln("No existe el id de carrera para mostrar.");
+        }
+
+    }
+/*    //Muestra por pantalla los resultados de una carrera, se solicita el id de la carrera
     public function mostrarResultadoCarrera(){
         $id = Menu::readln("Ingrese número de la carrera para mostrar resultados:");
         if ($this->existeId($id)){
@@ -73,7 +87,7 @@ class CarreraManager extends ArrayIdManager implements ABMinterface{
         }
 
     }
- 
+ */
     //Modifica los datos de un participante(posicion, pago, categoria) en una carrera, se solicita el id de la carrera
     public function modificarParticipante(){
         $id = Menu::readln("Ingrese número de la carrera en la que realizar modificaciones de participantes: ");

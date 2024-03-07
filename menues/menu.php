@@ -68,44 +68,24 @@ class Menu{
                 echo ($opcion[0] .' - '. $opcion[1]. PHP_EOL );
             } 
     
-            $opcion = readline('Elija una opcion: ');
+            $opcion = readline('Elija una opción: ');
         
             if (isset($opciones[$opcion])) {
                 $funcion = $opciones[$opcion][2];
-                call_user_func($funcion);
-            } else {
-            self::writeln("Opción inválida");
+					//La función tiene argumentos                
+                if (isset($opciones[$opcion][3])){
+                	call_user_func($funcion,$opciones[$opcion][3]);                
+                } else {
+                	call_user_func($funcion);
+                } 
+				 }	             
+             else {
+            	self::writeln("Opción inválida");
             }
-        }
-    }
-
-    //Primera elección del programa, para decidir quién opera con el sistema
-    public function elegirUsuario(){
-		self::cls();
-
-        $titulo = "Elige un tipo de usuario:";
-        
-        $opciones = [];
-
-        $opciones[0][0]= 0;
-        $opciones[0][1] = "Salir";
-        $opciones[0][2] = array($this, "exit");  //Llamar a la función exit de esta clase
-        
-        $opciones[1][0] = 1;
-        $opciones[1][1] = "Participante";
-        $opciones[1][2] = array($this,"operacionesParticipante");
-
-        $opciones[2][0] = 2;
-        $opciones[2][1] = "Administrador";
-        $opciones[2][2] = array($this,"operacionesAdmin");
-
-        self::menu($titulo,$opciones);
-    }
-
-    private function operacionesParticipante(){
-        self::writeln("Operaciones del participante");
+            }
     }
     
+
     public function operacionesAdmin(){
         $menuAdmin = new MenuAdmin();
         $menuAdmin->operacionesAdmin();

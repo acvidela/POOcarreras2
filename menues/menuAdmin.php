@@ -94,6 +94,7 @@ class MenuAdmin extends Menu{
                 $opciones[1][0] = 1;
                 $opciones[1][1] = "Mostrar resultados carrera";
                 $opciones[1][2] = array($this->carreraManager,"mostrarResultadoCarrera");
+                $opciones[1][3] = $this->atletaManager;
 
                 $opciones[2][0] = 2;
                 $opciones[2][1] = "Inscribir participante";

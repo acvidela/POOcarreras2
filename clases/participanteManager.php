@@ -6,6 +6,7 @@ require_once('lib' . DIRECTORY_SEPARATOR . 'ABMinterface.php');
 class ParticipanteManager extends ArrayIdManager implements ABMinterface{
 
     private $idCarrera;
+    private $clasificacion; //Arreglo  de participantes clasificados por posición en la carrera
 
     //De la base de datos levanta todos los participantes inscriptos en una carrera y los agrega al arreglo para manipularlos
     public function levantar(){
@@ -81,6 +82,20 @@ class ParticipanteManager extends ArrayIdManager implements ABMinterface{
         }
     }
     
+    //Retorna  una lista con los nombres y dorsales
+    public function getClasificacion(){
+        $this->clasificacion = [];
+        $tamanio = $this->tamanio();
+        $participantes = $this->getArreglo();
+        foreach ($participantes as $participante){
+            if ($participante->getFinalizo()){
+                $pos = $participante->getPosGeneral();
+                $this->clasificacion[$pos] = $participante->getId();
+            }
+        }
+        return $this->clasificacion;
+    }
+
     // Actualizar los datos de un participante por su ID
     public function modificacion() {
 	    $idAtleta = Menu::readln("Ingrese Id del atleta a modificar: ");
@@ -130,11 +145,14 @@ class ParticipanteManager extends ArrayIdManager implements ABMinterface{
 	    //$idAtleta = Menu::readln("Ingrese Id de atleta a modificar: ");
         //Cargo todos los participantes de la carrera
         $tamanio = $this->tamanio();
+        $clasificacion = $this->getClasificacion();
         //Para contabilizar las categorias
         $M = 0;
         $F = 0;
         $participantes = $this->getArreglo();
-        for ($pos = 1; $pos <= $tamanio ; $pos++) { 
+        for ($pos = 1; $pos <= $tamanio ; $pos++) {
+            if (!isset($participantes[$pos])){ 
+
             $idParticipante = Menu::readln("Ingrese id del participante (dorsal) que llegó en posición: " . $pos . " "); 
             
             if ($this->existeId($idParticipante)){
@@ -155,7 +173,9 @@ class ParticipanteManager extends ArrayIdManager implements ABMinterface{
                 }
             } else {
                 Menu::writeln("El id ingresado no se encuentra inscripto");
+            
             }
+        }
         }    
        
     }

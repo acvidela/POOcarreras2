@@ -139,17 +139,20 @@ class ParticipanteManager extends ArrayIdManager implements ABMinterface{
             
             if ($this->existeId($idParticipante)){
                 $participante = $this->getPorId($idParticipante);
-                $participante->setFinalizo(true);
-                $participante->setPosGeneral($pos);
-                if ($participante->getCategoria() == "F"){
-                    $F++;
-                    $participante->setPosCategoria($F);
-                } else {
-                    $M++;
-                    $participante->setPosCategoria($M);
+                if (!$participante->getFinalizo()){
+                    $participante->setFinalizo(true);
+                    $participante->setPosGeneral($pos);
+                    if ($participante->getCategoria() == "F"){
+                        $F++;
+                        $participante->setPosCategoria($F);
+                    } else {
+                        $M++;
+                        $participante->setPosCategoria($M);
+                    }
+                    $participante->update();
+               }else {
+                 Menu::writeln("Atención, el participante: " . $participante->getId() . " ya registra la posición: " . $participante->getPosGeneral() . ", si desea cambiarla utilice modificar participación");        
                 }
-                $participante->update();
-                //$this->agregar($participante);
             } else {
                 Menu::writeln("El id ingresado no se encuentra inscripto");
             }

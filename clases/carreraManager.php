@@ -113,7 +113,7 @@ class CarreraManager extends ArrayIdManager implements ABMinterface{
 
     //Dar de alta una carrera  $id,$nombre,$circuito,$fecha,$precio,$kits
     public function alta(){
-        $nombre = Menu::readln("Ingrese nombre carrera: ");
+        $nombre = Menu::readln(PHP_EOL . "Ingrese nombre carrera: ");
         $circuito = Menu::readln("Ingrese circuito: ");
         $fecha = Menu::readln("Ingrese fecha de carrera, con el formato dd/mm/yyyy: ");
         $precio = Menu::readln("Ingrese precio de la carrera: ");

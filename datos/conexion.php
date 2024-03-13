@@ -50,10 +50,20 @@
         * Recibe un sql de consulta y devuelve un arreglo de objetos
          */
         static function query($sql) {
-            $pDO = self::getConexion();
-            $statement = $pDO->query($sql, PDO::FETCH_OBJ);
-            $resultado = $statement->fetchAll();
-            return $resultado;
+				try {
+        			$pDO = self::getConexion();
+        			$statement = $pDO->query($sql, PDO::FETCH_OBJ);
+        			if ($statement === false) {
+            	// Si la consulta falla, lanzamos una excepción personalizada
+            		throw new PDOException("Error al ejecutar la consulta: " . $pDO->errorInfo()[2]);
+        			}
+        			$resultado = $statement->fetchAll();
+        			return $resultado;
+    			} catch (PDOException $e) {
+        // Captura la excepción y muestra un mensaje de error
+        			echo "Error: " . $e->getMessage();
+ 
+   			}
         }
 
         /**
@@ -61,7 +71,15 @@
          */
         static function ejecutar($sql) {
             $pDO = self::getConexion();
-            $pDO->query($sql);
+				try {            
+            	$pDO->query($sql);
+            	return true;
+            } catch (PDOException $e) {
+        // Captura la excepción y muestra un mensaje de error
+        			echo "Error: datos ingresados inválidos"; //. $e->getMessage();
+					return false;
+ 
+   			}
         }
 
         /**

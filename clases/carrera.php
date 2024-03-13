@@ -213,17 +213,18 @@ class Carrera {
         $sql = "INSERT INTO carreras (nombre, circuito, fecha, precio, id_kits)
                 VALUES ('$nombre', '$circuito', '$fecha', '$precio', $kitId)";
 
-        Conexion::ejecutar($sql);
+        if (Conexion::ejecutar($sql)){
 
-        $idCarrera = Conexion::getLastId();
-        $this->setId($idCarrera);
+        		$idCarrera = Conexion::getLastId();
+        		$this->setId($idCarrera);
         
-        //Agrega como clave extranjera en el kits el id de la carrera
-        $sql = "UPDATE kits 
-                SET id_carrera = $idCarrera
-                WHERE id = $kitId";
+        		//Agrega como clave extranjera en el kits el id de la carrera
+        		$sql = "UPDATE kits 
+            	    SET id_carrera = $idCarrera
+               	 WHERE id = $kitId";
 
-        Conexion::ejecutar($sql);
+        		Conexion::ejecutar($sql);
+        	}
 
     }
     

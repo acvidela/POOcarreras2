@@ -136,7 +136,7 @@ class CarreraManager extends ArrayIdManager implements ABMinterface{
             $carrera = $this->getPorId($id);
             Menu::writeln('Está por eliminar la siguiente carrera del sistema: '. PHP_EOL);
             $carrera->mostrar();
-            $rta = Menu::readln(PHP_EOL . '¿Está seguro? S/N');            
+            $rta = Menu::readln(PHP_EOL . '¿Está seguro? S/N: ');            
 				if($rta == 'S' or $rta == 's') {
 					$carrera->delete();
             	$this->eliminarPorId($id);
@@ -217,7 +217,7 @@ class CarreraManager extends ArrayIdManager implements ABMinterface{
             $carreraModificado = $this->getPorId($id);         	   
 				Menu::writeln('Está por modificar la siguiente carrera del sistema: '. PHP_EOL);
             $carreraModificado->mostrar();
-            $rta = Menu::readln(PHP_EOL . '¿Está seguro? S/N');            
+            $rta = Menu::readln(PHP_EOL . '¿Está seguro? S/N: ');            
 				if($rta == 'S' or $rta == 's') {            
             	Menu::writeln("A continuación ingrese los nuevos datos, enter para dejarlos sin modificar");
             	$nombre = Menu::readln("Ingrese nombre: ");

@@ -20,7 +20,7 @@ class MenuAdmin extends Menu{
 
                 $opciones = [];
 
-                //0 volver, 1 alta, 2 baja, 3 modificacion, 4 mostrar, 5 mostrar próximas
+                //0 volver, 1 alta, 2 baja, 3 modificacion, 4 mostrar, 5 mostrar resultados
 
                 $opciones[0][0]= 0;
                 $opciones[0][1] = "Volver al menu anterior";
@@ -39,14 +39,9 @@ class MenuAdmin extends Menu{
                 $opciones[3][2] = array($this->carreraManager,"modificacion");
 
                 $opciones[4][0] = 4;
-                $opciones[4][1] = "Mostrar todas las carreras";
+                $opciones[4][1] = "Mostrar carreras";
                 $opciones[4][2] = array($this->carreraManager,"mostrar");
 
-                
-					 $opciones[5][0] = 5;
-                $opciones[5][1] = "Mostrar próximas carreras";
-                $opciones[5][2] = array($this->carreraManager,"mostrarProximas");
-                
                 self::menu($titulo,$opciones);
 
         }        

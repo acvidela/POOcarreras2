@@ -59,7 +59,7 @@ class CarreraManager extends ArrayIdManager implements ABMinterface{
 			foreach ($carreras as $carrera) {
          	$carrera->mostrar();
             $lineas+=2;
-            if (($lineas + 1) % (Menu::lineasPorPagina())) === 0) {
+            if ((($lineas + 1) % (Menu::lineasPorPagina())) === 0) {
 		        Menu::waitForEnter();
       		  Menu::cls(); // Limpiar la pantalla antes de imprimir las siguientes líneas
     			}
@@ -67,6 +67,27 @@ class CarreraManager extends ArrayIdManager implements ABMinterface{
         Menu::waitForEnter();   
     }
 
+	//Muestra por pantalla las carreras próximas a realizarse
+    public function mostrarProximas(){
+	    $carreras = self::getArreglo();
+        Menu::subtitulo('Lista de carreras a realizarse');
+			$lineas = 0;
+			Menu::cls();        
+			foreach ($carreras as $carrera) {
+				$fechaCarrera = new DateTime($carrera->getFecha();
+				$hoy = new DateTime();
+				if ($fechaCarrera > $hoy){        	
+         		$carrera->mostrar();
+            	$lineas+=2;
+            	if ((($lineas + 1) % (Menu::lineasPorPagina())) === 0) {
+		        		Menu::waitForEnter();
+      		  		Menu::cls(); // Limpiar la pantalla antes de imprimir las siguientes líneas
+    				}
+    			}	
+        } 
+        Menu::waitForEnter();   
+    }
+    
 	//Ingresa por pantalla los resultados de una carrera, se solicita el id de la carrera
     public function ingresarResultadosCarrera(){
         $id = Menu::readln("Ingrese número de la carrera para ingresar resultados: ");

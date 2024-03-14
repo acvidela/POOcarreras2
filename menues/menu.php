@@ -3,6 +3,8 @@ require_once('menuAdmin.php');
 
 class Menu{
     
+	private static $lineasPorPagina = 10;   
+    
     public function __construct(){
     }
 
@@ -20,6 +22,19 @@ class Menu{
         return $rta;
    }   
    
+   //Retorna la cantidad de líneas que se ven por página en pantalla
+   public static function lineasPorPagina(){
+   	return self::$lineasPorPagina;
+   }
+   
+	// Función para esperar a que el usuario presione Enter   
+   public static function waitForEnter() {
+		echo "Presiona Enter para continuar...";
+    	// Lee la entrada del usuario
+    	fgets(STDIN);
+	}
+	
+	
    //Limpia la pantalla dependiendo del sistema operativo que estemos usando 
    public function cls(){
       if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
@@ -30,6 +45,8 @@ class Menu{
       }
    }
 
+		
+	
 	public function pantallaBienvenida($nombreSistema){
         self::writeln("**************************************");
         self::writeln("**                                 **");     

@@ -70,11 +70,11 @@ class CarreraManager extends ArrayIdManager implements ABMinterface{
 	//Muestra por pantalla las carreras próximas a realizarse
     public function mostrarProximas(){
 	    $carreras = self::getArreglo();
-        Menu::subtitulo('Lista de carreras a realizarse');
+        Menu::subtitulo('Lista de carreras próximas a realizarse');
 			$lineas = 0;
 			Menu::cls();        
 			foreach ($carreras as $carrera) {
-				$fechaCarrera = new DateTime($carrera->getFecha();
+				$fechaCarrera = new DateTime($carrera->getFecha());
 				$hoy = new DateTime();
 				if ($fechaCarrera > $hoy){        	
          		$carrera->mostrar();
@@ -130,11 +130,18 @@ class CarreraManager extends ArrayIdManager implements ABMinterface{
 
     //Dar de baja una carrera, se pide el id de la carrera a eliminar. Se elimina de la base de datos y del arreglo
     public function baja(){
+			Menu::subtitulo('Dar de baja una carrera');        
         $id = Menu::readln("Ingrese número de la carrera a eliminar: ");
         if ($this->existeId($id)){
             $carrera = $this->getPorId($id);
-            $carrera->delete();
-            $this->eliminarPorId($id);
+            Menu::writeln('Está por eliminar la siguiente carrera del sistema: '. PHP_EOL);
+            $carrera->mostrar();
+            $rta = Menu::readln(PHP_EOL . '¿Está seguro? S/N');            
+				if($rta == 'S' or $rta == 's') {
+					$carrera->delete();
+            	$this->eliminarPorId($id);
+            	Menu::writeln("Carrera eliminada con éxito");
+            }	
         } else{
             $id = Menu::readln("No existe el id a eliminar.");
         }

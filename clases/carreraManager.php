@@ -136,7 +136,7 @@ class CarreraManager extends ArrayIdManager implements ABMinterface{
             $carrera = $this->getPorId($id);
             Menu::writeln('Está por eliminar la siguiente carrera del sistema: '. PHP_EOL);
             $carrera->mostrar();
-            $rta = Menu::readln(PHP_EOL . '¿Está seguro? S/N');            
+            $rta = Menu::readln(PHP_EOL . '¿Está seguro? S/N: ');            
 				if($rta == 'S' or $rta == 's') {
 					$carrera->delete();
             	$this->eliminarPorId($id);
@@ -211,34 +211,39 @@ class CarreraManager extends ArrayIdManager implements ABMinterface{
 
     //Modificar una carrera $id,$nombre,$circuito,$fecha,$precio,$kits
     public function modificacion(){
+			Menu::subtitulo('Modificar una carrera');   			        
         $id = Menu::readln("Ingrese Id de carrera a modificar: ");
         if($this->existeId($id)){
             $carreraModificado = $this->getPorId($id);         	   
-            Menu::writeln("A continuación ingrese los nuevos datos, enter para dejarlos sin modificar");
-            $nombre = Menu::readln("Ingrese nombre: ");
-            if ($nombre != ""){
-                $carreraModificado->setNombre($nombre);
-            }
-            $circuito = Menu::readln("Ingrese circuito: ");
-            if ($circuito != ""){
-                $carreraModificado->setCircuito($circuito);
-            }
-            $fecha =  Menu::readln("Ingrese fecha de carrera, con el formato dd/mm/yyyy: ");
-            if ($fecha != ""){
-            $carreraModificado->setFecha($fecha);
-        }
-            $precio =  Menu::readln("Ingrese precio de carrera: ");
-            if ($precio != ""){
-            $carreraModificado->setPrecio($precio);
-        }
-            //Pide los datos y lo modifica en la base de datos
-            $kits = $this->modificaKits($id);
-
-            $carreraModificado->setKits($kits);
-            $carreraModificado->update();
-            
+				Menu::writeln('Está por modificar la siguiente carrera del sistema: '. PHP_EOL);
+            $carreraModificado->mostrar();
+            $rta = Menu::readln(PHP_EOL . '¿Está seguro? S/N: ');            
+				if($rta == 'S' or $rta == 's') {            
+            	Menu::writeln("A continuación ingrese los nuevos datos, enter para dejarlos sin modificar");
+            	$nombre = Menu::readln("Ingrese nombre: ");
+            	if ($nombre != ""){
+               	 $carreraModificado->setNombre($nombre);
+            	}
+            	$circuito = Menu::readln("Ingrese circuito: ");
+            	if ($circuito != ""){
+               	 $carreraModificado->setCircuito($circuito);
+            	}
+            	$fecha =  Menu::readln("Ingrese fecha de carrera, con el formato dd/mm/yyyy: ");
+            	if ($fecha != ""){
+         	   	$carreraModificado->setFecha($fecha);
+        			}
+            	$precio =  Menu::readln("Ingrese precio de carrera: ");
+            	if ($precio != ""){
+            	$carreraModificado->setPrecio($precio);
+        			}
+            	//Pide los datos y lo modifica en la base de datos
+            	$kits = $this->modificaKits($id);
+	            $carreraModificado->setKits($kits);
+   	         $carreraModificado->update();
+   	         Menu::writeln("Carrera modificada con éxito");
+      		}    
         }else {
-        Menu::writeln("El id ingresado no se encuentra entre nuestras carreras");
+   	     Menu::writeln("El id ingresado no se encuentra entre nuestras carreras");
     }
     }
 

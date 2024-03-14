@@ -254,9 +254,14 @@ class CarreraManager extends ArrayIdManager implements ABMinterface{
         $id = Menu::readln("Ingrese Id de carrera para inscribir: ");
         if($this->existeId($id)){
             $carrera = $this->getPorId($id);
-            $participantes = $carrera->getParticipantes();
-            //Agrega en el arreglo/tabla de particpantes uno nuevo en la carrera deseada
-            $participantes->alta();
+            Menu::writeln('Está por inscribir en la siguiente carrera: '. PHP_EOL);
+            $carrera->mostrar();
+            $rta = Menu::readln(PHP_EOL . '¿Está seguro? S/N: ');            
+			if($rta == 'S' or $rta == 's') {            
+                $participantes = $carrera->getParticipantes();
+                //Agrega en el arreglo/tabla de particpantes uno nuevo en la carrera deseada
+                 $participantes->alta();
+             }
         }
         else{
             $id = Menu::readln("No existe el id de carrera ingresado.");

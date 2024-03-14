@@ -58,12 +58,22 @@ class ParticipanteManager extends ArrayIdManager implements ABMinterface{
                 from atletas
                 where id = ". $idAtleta;
         $atleta = Conexion::query($sql);
+         //crea el objeto atleta
+         $átletaObjeto = new Atleta($atleta->nombre, $atleta->email, $atleta->fechadenacimiento);
+         //Al objeto atleta le asigna el id de la base de datos
+         $atletaObjeto->setId($idAtleta);
 
         if ($atleta != null){
+            Menu::writeln('Está por inscribir al siguiente atleta en la carrera: '. PHP_EOL);
+            $atletaObjeto->mostrar();
+            $rta = Menu::readln(PHP_EOL . '¿Está seguro? S/N: ');            
+				if($rta == 'S' or $rta == 's') {            
+            
             $categoria = Menu::readln("Ingrese en qué categoria desearía inscibirse: ");
             $participante = new Participante($this->idCarrera, $idAtleta, 0, 0,0,$categoria,false);
             $participante->save();
             $this->agregar($participante);
+                }
         } else{
             Menu::writeln("No existe el atleta, darlo de alta en el sistema. ");
         }

@@ -1,5 +1,5 @@
 <?php
-require_once 'datos' DIRECTORY_SEPARATOR . 'conexion.php';
+require_once 'datos' . DIRECTORY_SEPARATOR . 'conexion.php';
 
 class Atleta {
     private $id;

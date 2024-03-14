@@ -53,9 +53,9 @@ class CarreraManager extends ArrayIdManager implements ABMinterface{
     //Muestra por pantalla todas las carreras
     public function mostrar(){
 	    $carreras = self::getArreglo();
+	    Menu::cls();        
         Menu::subtitulo('Lista de carreras en nuestro sistema');
 			$lineas = 0;
-			Menu::cls();        
 			foreach ($carreras as $carrera) {
          	$carrera->mostrar();
             $lineas+=2;
@@ -149,6 +149,7 @@ class CarreraManager extends ArrayIdManager implements ABMinterface{
 
     //Dar de alta una carrera  $id,$nombre,$circuito,$fecha,$precio,$kits
     public function alta(){
+			Menu::subtitulo('Dar de alta una carrera');        
         $nombre = Menu::readln(PHP_EOL . "Ingrese nombre carrera: ");
         $circuito = Menu::readln("Ingrese circuito: ");
         $fecha = Menu::readln("Ingrese fecha de carrera, con el formato dd/mm/yyyy: ");
@@ -175,6 +176,8 @@ class CarreraManager extends ArrayIdManager implements ABMinterface{
         $carrera->save();
 
         $this->agregar($carrera);
+        Menu::writeln("Carrera agregada con éxito");
+
     }
 
 

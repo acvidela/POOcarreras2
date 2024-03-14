@@ -74,7 +74,8 @@ class Atleta {
         echo "ID: " . $this->getId() 
             . ", Nombre: " . $this->getNombre() 
             . ", Email: " . $this->getEmail() 
-            . ", Edad: " . $this->getEdad();
+            . ", Edad: " . $this->getEdad()
+            . PHP_EOL;
     }
 
     //Guarda en la base de datos

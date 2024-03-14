@@ -53,13 +53,13 @@ class CarreraManager extends ArrayIdManager implements ABMinterface{
     //Muestra por pantalla todas las carreras
     public function mostrar(){
 	    $carreras = self::getArreglo();
+	    Menu::cls();        
         Menu::subtitulo('Lista de carreras en nuestro sistema');
 			$lineas = 0;
-			Menu::cls();        
 			foreach ($carreras as $carrera) {
          	$carrera->mostrar();
             $lineas+=2;
-            if ((($lineas + 1) % (Menu::lineasPorPagina())) === 0) {
+            if ((($lineas) % (Menu::lineasPorPagina())) === 0) {
 		        Menu::waitForEnter();
       		  Menu::cls(); // Limpiar la pantalla antes de imprimir las siguientes líneas
     			}

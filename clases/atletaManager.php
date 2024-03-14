@@ -84,12 +84,19 @@ class AtletaManager extends ArrayIdManager implements ABMinterface{
     // Mostrar por pantalla todos los atletas
 	public function mostrar(){
 		$atletas = $this->getArreglo();
+		Menu::cls();		
 		Menu::subtitulo('Lista de atletas en nuestro sistema');
-        foreach ($atletas as $atleta) {
+		$lineas = 0;
+		  
+      foreach ($atletas as $atleta) {
 	    	$atleta->mostrar();
-   	 	echo(PHP_EOL);
-        }
-        echo(PHP_EOL);
+   	   $lineas+=1;
+         if ((($lineas) % (Menu::lineasPorPagina())) === 0) {
+		   	Menu::waitForEnter();
+      		Menu::cls(); // Limpiar la pantalla antes de imprimir las siguientes líneas
+    		}
+        } 
+        Menu::waitForEnter();   
     }
 }
 

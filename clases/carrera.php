@@ -16,7 +16,12 @@ class Carrera {
     {
         $this->nombre = $nombre;
         $this->circuito = $circuito;
-        $this->fecha = $fecha;
+        if (is_string($fecha)){
+            $this->fecha = date("Y-m-d H:i:s", strtotime(str_replace("/", "-", $fecha)));
+            //$this->fechaNacimiento = date("Y-m-d H:i:s", strtotime($fechaNacimiento));
+        } else{
+            $this->fecha = $fecha;       
+        }
         $this->precio = $precio;
         $this->kits = $kits;
     }

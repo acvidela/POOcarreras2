@@ -36,7 +36,7 @@ class Menu{
 	
 	
    //Limpia la pantalla dependiendo del sistema operativo que estemos usando 
-   public function cls(){
+   public static function cls(){
       if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
     // Estás en Windows
             popen('cls', 'w');//system("cls");

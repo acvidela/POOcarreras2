@@ -11,7 +11,8 @@ class Atleta {
         $this->nombre = $nombre;
         $this->email = $email;
         if (is_string($fechaNacimiento)){
-            $this->fechaNacimiento = date("Y-m-d H:i:s", strtotime($fechaNacimiento));
+            $this->fechaNacimiento = date("Y-m-d H:i:s", strtotime(str_replace("/", "-", $fechaNacimiento)));
+            //$this->fechaNacimiento = date("Y-m-d H:i:s", strtotime($fechaNacimiento));
         } else{
             $this->fechaNacimiento = $fechaNacimiento;       
         } 

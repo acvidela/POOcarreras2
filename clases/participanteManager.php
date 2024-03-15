@@ -58,23 +58,32 @@ class ParticipanteManager extends ArrayIdManager implements ABMinterface{
                 from atletas
                 where id = ". $idAtleta;
         $atleta = Conexion::query($sql);
-         //crea el objeto atleta
-         $átletaObjeto = new Atleta($atleta->nombre, $atleta->email, $atleta->fechadenacimiento);
-         //Al objeto atleta le asigna el id de la base de datos
-         $atletaObjeto->setId($idAtleta);
-
+         
         if ($atleta != null){
-            Menu::writeln('Está por inscribir al siguiente atleta en la carrera: '. PHP_EOL);
-            $atletaObjeto->mostrar();
-            $rta = Menu::readln(PHP_EOL . '¿Está seguro? S/N: ');            
-				if($rta == 'S' or $rta == 's') {            
-            
-            $categoria = Menu::readln("Ingrese en qué categoria desearía inscibirse: ");
-            $participante = new Participante($this->idCarrera, $idAtleta, 0, 0,0,$categoria,false);
-            $participante->save();
-            $this->agregar($participante);
-                }
-        } else{
+				if($this->atletaEstaInscripto($idAtleta)){
+					Menu::writeln('El atleta ya se encuentra inscripto en esta carrera'. PHP_EOL);
+          	}else {
+          	   //crea el objeto atleta
+         		$atletaObjeto = new Atleta($atleta[0]->nombre, $atleta[0]->email, $atleta[0]->fechadenacimiento);
+         		//Al objeto atleta le asigna el id de la base de datos
+         		$atletaObjeto->setId($idAtleta);
+            	Menu::writeln('Está por inscribir al siguiente atleta en la carrera: '. PHP_EOL);
+            	$atletaObjeto->mostrar();
+            	$rta = Menu::readln(PHP_EOL . '¿Está seguro? S/N: ');            
+					if($rta == 'S' or $rta == 's') {            
+            		$categoria = Menu::readln("Ingrese en qué categoria desearía inscibirse(F/M): ");
+						if($categoria == "F" or $categoria == "f") {
+							$categoria = "F";
+						}else {
+							$categoria = "M"; //Valor por defecto
+						}		          		
+          		$participante = new Participante($this->idCarrera, $idAtleta, 0, 0,0,$categoria,false);
+            	$participante->save();
+            	$this->agregar($participante);
+            	Menu::writeln("El atleta: ". $idAtleta . " ha sido inscripto con éxito en la carrera: ". $this->idCarrera . " con el número(dorsal): " . $participante->getId());
+          	
+            }
+        } } else{
             Menu::writeln("No existe el atleta, darlo de alta en el sistema. ");
         }
     }
@@ -105,6 +114,17 @@ class ParticipanteManager extends ArrayIdManager implements ABMinterface{
         }
         return $this->clasificacion;
     }
+		
+	//Retorna si un atleta (dado su id) ya se encuentra inscripto en esta carrera	
+	public function atletaEstaInscripto($idAtleta){
+		$participantes = $this->getArreglo();
+      foreach ($participantes as $participante){
+      	if ($participante->getIdAtleta()==$idAtleta){
+                return true;
+	      }	
+	   }
+	   return false;
+	 }   
 
     // Actualizar los datos de un participante por su ID
     public function modificacion() {

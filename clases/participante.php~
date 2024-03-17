@@ -163,18 +163,17 @@ class Participante {
     public function mostrarCombinado($atletas){
         if ($this->getFinalizo()){ 
             $atleta = $atletas->getPorId($this->getIdAtleta());
-            echo "Dorsal del atleta: " . $this->getId() . ", corresponde al atleta: " .  $atleta->getNombre().  ", Posición general: " . $this->getPosGeneral() .", Categoría: " . $this->getCategoria() . ", Posición en la categoría: " .$this->getPosCategoria();
+            echo "Dorsal del atleta: " . $this->getId() . ", corresponde al atleta: " .  $atleta->getNombre().  ". Posición general: " . $this->getPosGeneral() .", Categoría: " . $this->getCategoria() . ", Posición en la categoría: " .$this->getPosCategoria();
         } else{
-            echo "Dorsal del atleta: " . $this->getId() . ", corresponde al atleta: " .  $this->getIdAtleta(). ", No finalizó la carrera";
+            echo "Dorsal del atleta: " . $this->getId() . ", corresponde al atleta: " .  $this->getIdAtleta(). ", no finalizó la carrera";
         }
         echo(PHP_EOL);
     }
     
-       //Imprime por pantalla un participante inscripto en una carrera,  
-    public function mostrarCombinado($atletas){
+    //Imprime por pantalla un participante inscripto en una carrera,  
+    public function mostrar(){
         if ($this->getFinalizo()){ 
-            $atleta = $atletas->getPorId($this->getIdAtleta());
-            echo "Dorsal del atleta: " . $this->getId() . ", corresponde al atleta: " .  $atleta->getNombre().  ", Posición general: " . $this->getPosGeneral() .", Categoría: " . $this->getCategoria() . ", Posición en la categoría: " .$this->getPosCategoria();
+            echo "Dorsal del atleta: " . $this->getId() . ", corresponde al atleta: " .  $this->getIdAtleta().  ", Posición general: " . $this->getPosGeneral() .", Categoría: " . $this->getCategoria() . ", Posición en la categoría: " .$this->getPosCategoria();
         } else{
             echo "Dorsal del atleta: " . $this->getId() . ", corresponde al atleta: " .  $this->getIdAtleta(). ", No finalizó la carrera";
         }

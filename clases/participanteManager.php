@@ -6,7 +6,7 @@ require_once('lib' . DIRECTORY_SEPARATOR . 'ABMinterface.php');
 class ParticipanteManager extends ArrayIdManager implements ABMinterface{
 
     private $idCarrera;
-    private $clasificacion; //Arreglo  de participantes clasificados por posición en la carrera
+
 
     //De la base de datos levanta todos los participantes inscriptos en una carrera y los agrega al arreglo para manipularlos
     public function levantar(){
@@ -18,7 +18,6 @@ class ParticipanteManager extends ArrayIdManager implements ABMinterface{
         foreach ($participantes as $participante){
             $nuevoParticipante = new Participante($participante->id_carrera, $participante->id_atleta, $participante->pago, $participante->pos_general, $participante->pos_categoria, $participante->categoria, $participante->finalizo);
             $nuevoParticipante->setId($participante->id);
-            
             $this->agregar($nuevoParticipante);
         }
 
@@ -29,6 +28,7 @@ class ParticipanteManager extends ArrayIdManager implements ABMinterface{
     {
        $this->arreglo = [];
        $this->idCarrera = $idCarrera;
+		 $this->clasificacion = [];	       
        $this->levantar();
     }
             
@@ -44,9 +44,20 @@ class ParticipanteManager extends ArrayIdManager implements ABMinterface{
     //Muestra los participantes y resultados de una carrera en particular, combinando la información con los arreglos
     public function mostrarCombinado($atletas){
         $participantes = $this->getArreglo();
-        Menu::subtitulo("Participantes inscriptos en la carrera");
+        $clasificacion = $this->getClasificacion();
+        Menu::subtitulo("Participantes clasificados");
+		  //Cantidad de inscriptos en la carrera
+        $tamanio = $this->tamanio();		  
+		  for ($pos = 1; $pos < $tamanio; $pos++){
+				if (isset($clasificacion[$pos])){       		
+        			$participantes[$clasificacion[$pos]]->mostrarCombinado($atletas);
+        		} 
+		  }        
+		  Menu::subtitulo("Participantes que aún no terminaron la carrera");        
         foreach ($participantes as $participante) {
-            $participante->mostrarCombinado($atletas);
+				if (!$participante->getFinalizo()){            
+            	$participante->mostrarCombinado($atletas);
+            }	
         }
     }    
     
@@ -108,18 +119,16 @@ class ParticipanteManager extends ArrayIdManager implements ABMinterface{
             }
     }
  
-   //Retorna  una lista con los nombres y dorsales
+   //Retorna un arreglo donde el id es la posición en la carreara y el contenido el id
     public function getClasificacion(){
-        $this->clasificacion = [];
-        $tamanio = $this->tamanio();
-        $participantes = $this->getArreglo();
-        foreach ($participantes as $participante){
-            if ($participante->getFinalizo()){
-                $pos = $participante->getPosGeneral();
-                $this->clasificacion[$pos] = $participante->getId();
-            }
-        }
-        return $this->clasificacion;
+			$clasificacion = [];
+			$participantes = $this->getArreglo();
+      	foreach ($participantes as $participante){       
+        		if($participante->getFinalizo()) {
+        			$clasificacion[$participante->getPosGeneral()] = $participante->getId(); 
+        		}
+        	}
+        	return $clasificacion;
     }
 		
 	//Retorna si un atleta (dado su id) ya se encuentra inscripto en esta carrera	
@@ -179,31 +188,32 @@ class ParticipanteManager extends ArrayIdManager implements ABMinterface{
         
     // Cargar datos resultados carrera general por posición
     public function ingresarResultadosCarrera() {
-	    //$idAtleta = Menu::readln("Ingrese Id de atleta a modificar: ");
-        //Cargo todos los participantes de la carrera
+
+	     //Cantidad de inscriptos en la carrera
         $tamanio = $this->tamanio();
+		 //Cargo la clasificación ya cargada 	        
         $clasificacion = $this->getClasificacion();
+        
         //Para contabilizar las categorias
         $M = 0;
         $F = 0;
+        
         $participantes = $this->getArreglo();
         for ($pos = 1; $pos <= $tamanio ; $pos++) {
             if (!isset($participantes[$pos])){ 
-
-            $idParticipante = Menu::readln("Ingrese id del participante (dorsal) que llegó en posición: " . $pos . " "); 
-            
-            if ($this->existeId($idParticipante)){
-                $participante = $this->getPorId($idParticipante);
-                if (!$participante->getFinalizo()){
-                    $participante->setFinalizo(true);
-                    $participante->setPosGeneral($pos);
-                    if ($participante->getCategoria() == "F"){
-                        $F++;
-                        $participante->setPosCategoria($F);
-                    } else {
-                        $M++;
-                        $participante->setPosCategoria($M);
-                    }
+					$idParticipante = Menu::readln("Ingrese id del participante (dorsal) que llegó en posición: " . $pos . " "); 
+               if ($this->existeId($idParticipante)){
+            	    $participante = $this->getPorId($idParticipante);
+               	 if (!$participante->getFinalizo()){
+                  	  $participante->setFinalizo(true);
+                    	  $participante->setPosGeneral($pos);
+                    	  if ($participante->getCategoria() == "F"){
+                       	 $F++;
+                        	$participante->setPosCategoria($F);
+                   	 } else {
+                     	   $M++;
+                        	$participante->setPosCategoria($M);
+                    		}
                     $participante->update();
                }else {
                  Menu::writeln("Atención, el participante: " . $participante->getId() . " ya registra la posición: " . $participante->getPosGeneral() . ", si desea cambiarla utilice modificar participación");        

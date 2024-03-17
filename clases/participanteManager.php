@@ -91,17 +91,24 @@ class ParticipanteManager extends ArrayIdManager implements ABMinterface{
 
     //Dar de baja un participante de una carrera, se pide el id del participante a eliminar(el número en esa carrera) . Se elimina de la base de datos y del arreglo
     public function baja(){
-        $id = Menu::readln("Ingrese número del participante (dorsal) a eliminar: ");
-        if ($this->existeId($id)){
-            $atleta = $this->getPorId($id);
-            $atleta->delete();
-            $this->eliminarPorId($id);
-        } else{
-            $id = Menu::readln("No existe el id a eliminar.");
-        }
+			$id = Menu::readln("Ingrese número del participante (dorsal) a eliminar: ");
+        	if ($this->existeId($id)){
+            $participante = $this->getPorId($id);
+				Menu::writeln('Está por eliminar al siguiente participante de la carrera: '. PHP_EOL);
+            $participante->mostrar();
+            $rta = Menu::readln(PHP_EOL . '¿Está seguro? S/N: ');            
+				if($rta == 'S' or $rta == 's') {            
+            	$participante->delete();
+            	$this->eliminarPorId($id);
+            	Menu::writeln("Participante eliminado con éxito");
+       		}
+       	} else{
+       		//Utiliza readln para quedarse en pantalla la interacción del USR
+				$id = Menu::readln("No existe el id a eliminar.");
+            }
     }
-    
-    //Retorna  una lista con los nombres y dorsales
+ 
+   //Retorna  una lista con los nombres y dorsales
     public function getClasificacion(){
         $this->clasificacion = [];
         $tamanio = $this->tamanio();

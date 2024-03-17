@@ -48,9 +48,9 @@ class ParticipanteManager extends ArrayIdManager implements ABMinterface{
         Menu::subtitulo("Participantes clasificados");
 		  //Cantidad de inscriptos en la carrera
         $tamanio = $this->tamanio();		  
-		  for ($pos = 1; $pos < $tamanio; $pos++){
+		  for ($pos = 1; $pos <= $tamanio; $pos++){
 				if (isset($clasificacion[$pos])){       		
-        			$participantes[$pos]->mostrarCombinado($atletas);
+        			$participantes[$clasificacion[$pos]]->mostrarCombinado($atletas);
         		} 
 		  }        
 		  Menu::subtitulo("Participantes que aún no terminaron la carrera");        
@@ -141,49 +141,75 @@ class ParticipanteManager extends ArrayIdManager implements ABMinterface{
 	   }
 	   return false;
 	 }   
+	 
+	 //Modifica la clasificación de un participante
+	 public function modificarClasificacion($participante){
+		$finalizo = Menu::readln("¿Finalizó la carrera? S/N: ");
+		$clasificacion = $this->getClasificacion();      
+      if ($finalizo  == "S" || $finalizo=="s" || ($finalizo == "" and $participante->getFinalizo()) )){
+      	$posGeneral = Menu::readln("Ingrese posición general: ");
+         if ($posGeneral != ""){
+				if((!isset($clasificacion[$posGeneral]))and ($posGeneral <= $this->tamanio()))  {         	
+         		$participante->setPosGeneral($posGeneral);
+					$participante->setFinalizo(true);
+	         } else {
+	         	Menu::writeln("No pudo asignarse la posición, ya está asignada a otro participante");
+	          }
+	       }}else {
+            	$participante->setFinalizo(false);
+               $participante->setPosGeneral(0);
+               $participante->setPosCategoria(0);
+                        
+          }
+			 $F = $M = 0;
+			 $participantes = $this->getArreglo();	          
+          $clasificacion = $this->getClasificacion();
+          for ($pos = 1; $pos <= $this->tamanio(); $pos++){
+				if (isset($clasificacion[$pos])){       		
+					if($participantes[$clasificacion[$pos]]->getCategoria() == 'F') {
+						$F++;
+						$participantes[$clasificacion[$pos]]->setPosCategoria($F);        			
+					} else{	        			
+						$M++;        				
+        				$participantes[$clasificacion[$pos]]->setPosCategoria($M);
+        	   	} 
+		       }
+		    }
+		}                              
+         
 
     // Actualizar los datos de un participante por su ID
     public function modificacion() {
-	    $idAtleta = Menu::readln("Ingrese Id del atleta a modificar: ");
-        //Verifico que existe, ya está inscripto
-        $participantes = $this->getArreglo();
-        foreach ($participantes as $participante){
-            if ($participante->getIdAtleta()==$idAtleta){
-                $idParticipante = $participante->getId();
-                if ($this->existeId($idParticipante)){
-                    Menu::writeln("A continuación ingrese los nuevos datos, enter para dejarlos sin modificar");
-                    $participante = $this->getPorId($idParticipante);
-                    $categoria = Menu::readln("Ingrese nueva categoria: ");
-                    if ($categoria != ""){
-                        $participante->setCategoria($categoria);
-                    }
-                    $pago = Menu::readln("Ingrese monto pagado: ");
-                    if ($pago != ""){
-                        $participante->setPago($pago);
-                    }
-                    $finalizo = Menu::readln("¿Finalizó la carrera? Y/N: ");
-                    if ($finalizo  == "Y" || $finalizo=="y"){
-                        $participante->setFinalizo(true);
-                        $posGeneral = Menu::readln("Ingrese posición general: ");
-                        if ($posGeneral != ""){
-                            $participante->setPosGeneral($posGeneral);
-                        }
-                        $posCategoria = Menu::readln("Ingrese posición en la categoría: ");
-                        if ($posGeneral != ""){
-                            $participante->setPosCategoria($posCategoria);
-                        }
-                    } else {
-                        $participante->setFinalizo(false);
-                        $participante->setPosGeneral(0);
-                        $participante->setPosCategoria(0); 
-                    }
-                }
-                $participante->update();
-                $this->agregar($participante);
-                return;
-            }
-        }    
-        Menu::writeln("El id ingresado no se encuentra inscripto");
+		$idParticipante = Menu::readln("Ingrese Id del participante (dorsal) a modificar: ");
+      //Verifico que existe, ya está inscripto
+      $participantes = $this->getArreglo();
+      if ($this->existeId($idParticipante)){
+			$participante = $this->getPorId($idParticipante);      	
+      	Menu::writeln('Está por modificar al siguiente participante de la carrera: '. PHP_EOL);
+         $participante->mostrar();
+         $rta = Menu::readln(PHP_EOL . '¿Está seguro? S/N: ');            
+			if($rta == 'S' or $rta == 's') {            
+      		Menu::writeln("A continuación ingrese los nuevos datos, ENTER para dejarlos sin modificar");
+         	$categoria = Menu::readln("Ingrese nueva categoria: ");
+         	if ($categoria != ""){
+					if($categoria == 'F' or $categoria == 'f') {                        
+            		$participante->setCategoria("F");
+            	}else {
+            		$participante->setCategoria("M");
+					}	
+         	}
+         	$pago = Menu::readln("Ingrese monto pagado: ");
+         	if ($pago != ""){
+	         	$participante->setPago($pago);
+         	}
+         	//La modificacion de la clasificación se procesa en una nueva función dada su complejidad
+         	$this->modificarClasificacion($participante);
+				$participante->update();
+				      	
+      	}
+      	return;
+       }
+        $idParticipante = Menu::readln("El id ingresado no se encuentra inscripto");
     }
         
     // Cargar datos resultados carrera general por posición

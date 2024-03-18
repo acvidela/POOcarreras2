@@ -47,11 +47,16 @@ class AtletaManager extends ArrayIdManager implements ABMinterface{
         $id = Menu::readln("Ingrese número del atleta a eliminar:");
         if ($this->existeId($id)){
             $atleta = $this->getPorId($id);
-            //Lo elimina de la base de datos
-            $atleta->delete();
-            //Lo elimina del arreglo
-            $this->eliminarPorId($id);
-        } else{
+            Menu::writeln('Está por eliminar al siguiente atleta del sistema: '. PHP_EOL);
+            $atleta->mostrar();
+            $rta = Menu::readln(PHP_EOL . '¿Está seguro? S/N: ');            
+            if($rta == 'S' or $rta == 's') {  
+                //Lo elimina de la base de datos
+                $atleta->delete();
+                //Lo elimina del arreglo
+                $this->eliminarPorId($id);
+                $rta = Menu::readln("Atleta eliminado con éxito");
+        } }else{
             $id = Menu::readln("No existe el id a eliminar.");
         }
     }

@@ -173,9 +173,9 @@ class Participante {
     //Imprime por pantalla un participante inscripto en una carrera,  
     public function mostrar(){
         if ($this->getFinalizo()){ 
-            echo "Dorsal del atleta: " . $this->getId() . ", corresponde al atleta: " .  $this->getIdAtleta().  ", Posición general: " . $this->getPosGeneral() .", Categoría: " . $this->getCategoria() . ", Posición en la categoría: " .$this->getPosCategoria();
+            echo "Dorsal del atleta: " . $this->getId() . ", corresponde al atleta: " .  $this->getIdAtleta().  ", Posición general: " . $this->getPosGeneral() .". Categoría: " . $this->getCategoria() . ", Posición en la categoría: " .$this->getPosCategoria() . ". Pago: ". $this->getPago();
         } else{
-            echo "Dorsal del atleta: " . $this->getId() . ", corresponde al atleta: " .  $this->getIdAtleta(). ", No finalizó la carrera";
+            echo "Dorsal del atleta: " . $this->getId() . ", corresponde al atleta: " .  $this->getIdAtleta(). ", No finalizó la carrera". ". Categoría: " . $this->getCategoria() . ". Pago: ". $this->getPago();
         }
         echo(PHP_EOL);
     }

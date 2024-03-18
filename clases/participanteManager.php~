@@ -142,11 +142,30 @@ class ParticipanteManager extends ArrayIdManager implements ABMinterface{
 	   return false;
 	 }   
 	 
+	// Ante cambios en la clasificación general reordena la clasificacion por categorias	 
+	 public function modificarClasificacionCategorias(){
+		$F = $M = 0;
+		$participantes = $this->getArreglo();	          
+      $clasificacion = $this->getClasificacion();
+      for ($pos = 1; $pos <= $this->tamanio(); $pos++){
+			if (isset($clasificacion[$pos])){       		
+				if($participantes[$clasificacion[$pos]]->getCategoria() == 'F') {
+					$F++;
+					$participantes[$clasificacion[$pos]]->setPosCategoria($F);        			
+				} else{	        			
+					$M++;        				
+       			$participantes[$clasificacion[$pos]]->setPosCategoria($M);
+       	 	} 
+       	 	$participantes[$clasificacion[$pos]]->update();
+		   }
+		}	 
+	 }
+	 
 	 //Modifica la clasificación de un participante
 	 public function modificarClasificacion($participante){
 		$finalizo = Menu::readln("¿Finalizó la carrera? S/N: ");
 		$clasificacion = $this->getClasificacion();      
-      if ($finalizo  == "S" || $finalizo=="s" || ($finalizo == "" and $participante->getFinalizo()) )){
+      if ($finalizo  == "S" || $finalizo=="s" || ($finalizo == "" and $participante->getFinalizo()) ){
       	$posGeneral = Menu::readln("Ingrese posición general: ");
          if ($posGeneral != ""){
 				if((!isset($clasificacion[$posGeneral]))and ($posGeneral <= $this->tamanio()))  {         	
@@ -161,20 +180,7 @@ class ParticipanteManager extends ArrayIdManager implements ABMinterface{
                $participante->setPosCategoria(0);
                         
           }
-			 $F = $M = 0;
-			 $participantes = $this->getArreglo();	          
-          $clasificacion = $this->getClasificacion();
-          for ($pos = 1; $pos <= $this->tamanio(); $pos++){
-				if (isset($clasificacion[$pos])){       		
-					if($participantes[$clasificacion[$pos]]->getCategoria() == 'F') {
-						$F++;
-						$participantes[$clasificacion[$pos]]->setPosCategoria($F);        			
-					} else{	        			
-						$M++;        				
-        				$participantes[$clasificacion[$pos]]->setPosCategoria($M);
-        	   	} 
-		       }
-		    }
+			$this->modificarClasificacionCategorias();
 		}                              
          
 
@@ -220,36 +226,25 @@ class ParticipanteManager extends ArrayIdManager implements ABMinterface{
 		 //Cargo la clasificación ya cargada 	        
         $clasificacion = $this->getClasificacion();
         
-        //Para contabilizar las categorias
-        $M = 0;
-        $F = 0;
-        
         $participantes = $this->getArreglo();
         for ($pos = 1; $pos <= $tamanio ; $pos++) {
-            if (!isset($participantes[$pos])){ 
+            if (!isset($clasificacion[$pos])){ 
 					$idParticipante = Menu::readln("Ingrese id del participante (dorsal) que llegó en posición: " . $pos . " "); 
                if ($this->existeId($idParticipante)){
             	    $participante = $this->getPorId($idParticipante);
                	 if (!$participante->getFinalizo()){
                   	  $participante->setFinalizo(true);
                     	  $participante->setPosGeneral($pos);
-                    	  if ($participante->getCategoria() == "F"){
-                       	 $F++;
-                        	$participante->setPosCategoria($F);
-                   	 } else {
-                     	   $M++;
-                        	$participante->setPosCategoria($M);
-                    		}
-                    $participante->update();
+                       $participante->update();
                }else {
                  Menu::writeln("Atención, el participante: " . $participante->getId() . " ya registra la posición: " . $participante->getPosGeneral() . ", si desea cambiarla utilice modificar participación");        
-                }
-            } else {
+               }
+            }else {
                 Menu::writeln("El id ingresado no se encuentra inscripto");
-            
             }
+          }
         }
-        }    
+        $this->modificarClasificacionCategorias();    
        
     }
 

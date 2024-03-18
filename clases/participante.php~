@@ -163,7 +163,7 @@ class Participante {
     public function mostrarCombinado($atletas){
         if ($this->getFinalizo()){ 
             $atleta = $atletas->getPorId($this->getIdAtleta());
-            echo "Dorsal del atleta: " . $this->getId() . ", corresponde al atleta: " .  $atleta->getNombre().  ". Posición general: " . $this->getPosGeneral() .", Categoría: " . $this->getCategoria() . ", Posición en la categoría: " .$this->getPosCategoria();
+            echo "Posición general: " . $this->getPosGeneral() . ", dorsal del atleta: " . $this->getId() . ", corresponde al atleta: " .  $atleta->getNombre().  ". Categoría: " . $this->getCategoria() . ", posición en la categoría: " . $this->getPosCategoria();
         } else{
             echo "Dorsal del atleta: " . $this->getId() . ", corresponde al atleta: " .  $this->getIdAtleta(). ", no finalizó la carrera";
         }

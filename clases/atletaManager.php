@@ -40,6 +40,7 @@ class AtletaManager extends ArrayIdManager implements ABMinterface{
         $atleta->save();
         //Lo agrega al arreglo
         $this->agregar($atleta);
+        $rta = Menu::readln("Atleta creado con éxito");
     }
 
     //Dar de baja un atleta, se pide el id del atleta a eliminar. Se elimina de la base de datos y del arreglo
@@ -66,14 +67,18 @@ class AtletaManager extends ArrayIdManager implements ABMinterface{
 	    $id = Menu::readln("Ingrese Id de atleta a modificar: ");
         if($this->existeId($id)){
             $atletaModificado = $this->getPorId($id);         	   
-            Menu::writeln("A continuación ingrese los nuevos datos, ENTER para dejarlos sin modificar");
-            $nombre = Menu::readln("Ingrese nombre y apellido: ");
-            if ($nombre != ""){
-                $atletaModificado->setNombre($nombre);
-            }
-            $email = Menu::readln("Ingrese email: ");
-            if ($email != ""){
-                $atletaModificado->setEmail($email);
+            Menu::writeln('Está por modificar al siguiente atleta del sistema: '. PHP_EOL);
+            $atletaModificado->mostrar();
+            $rta = Menu::readln(PHP_EOL . '¿Está seguro? S/N: ');            
+            if($rta == 'S' or $rta == 's') {  
+                Menu::writeln("A continuación ingrese los nuevos datos, ENTER para dejarlos sin modificar");
+                $nombre = Menu::readln("Ingrese nombre y apellido: ");
+                if ($nombre != ""){
+                    $atletaModificado->setNombre($nombre);
+                }
+                $email = Menu::readln("Ingrese email: ");
+                if ($email != ""){
+                    $atletaModificado->setEmail($email);
             }
             $fechaNacimiento =  Menu::readln("Ingrese fecha de nacimiento, con el formato dd/mm/yyyy: ");
             if ($fechaNacimiento != ""){
@@ -81,7 +86,8 @@ class AtletaManager extends ArrayIdManager implements ABMinterface{
             }
             //Lo modifica en la Base de Datos
             $atletaModificado->update();
-        }else {
+            $rta = Menu::readln("Atleta modificado con éxito");
+        }}else {
                 Menu::writeln("El id ingresado no se encuentra entre nuestros atletas");
         }
     }

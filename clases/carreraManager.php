@@ -93,9 +93,14 @@ class CarreraManager extends ArrayIdManager implements ABMinterface{
         $id = Menu::readln("Ingrese número de la carrera para ingresar resultados: ");
         if ($this->existeId($id)){
             $carrera = $this->getPorId($id);
-            $carrera->ingresarResultadosCarrera();
-        } else{
-            $id = Menu::readln("No existe el id de carrera para mostrar.");
+            Menu::writeln('Está por ingresar los resultados de la carrera: '. PHP_EOL);
+         	$carrera->mostrar();
+         	$rta = Menu::readln(PHP_EOL . '¿Está seguro? S/N: ');            
+				if($rta == 'S' or $rta == 's') {            
+            	$carrera->ingresarResultadosCarrera();
+        		}
+        }else{
+            	$id = Menu::readln("No existe el id de carrera para mostrar.");
         }
     }
 

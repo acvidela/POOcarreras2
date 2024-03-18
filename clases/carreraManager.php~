@@ -130,13 +130,13 @@ class CarreraManager extends ArrayIdManager implements ABMinterface{
 
     //Dar de baja una carrera, se pide el id de la carrera a eliminar. Se elimina de la base de datos y del arreglo
     public function baja(){
-			Menu::subtitulo('Dar de baja una carrera');        
+		  Menu::subtitulo('Dar de baja una carrera');        
         $id = Menu::readln("Ingrese número de la carrera a eliminar: ");
         if ($this->existeId($id)){
             $carrera = $this->getPorId($id);
             Menu::writeln('Está por eliminar la siguiente carrera del sistema: '. PHP_EOL);
             $carrera->mostrar();
-            $rta = Menu::readln(PHP_EOL . '¿Está seguro? S/N: ');            
+            $rta = Menu::readln(PHP_EOL . '¿Está seguro? Se eliminarán también los participantes inscriptos S/N: ');            
 				if($rta == 'S' or $rta == 's') {
 					$carrera->delete();
             	$this->eliminarPorId($id);
@@ -250,6 +250,7 @@ class CarreraManager extends ArrayIdManager implements ABMinterface{
     }
     }
 
+//Solicita el número de carrera y el número de atleta a inscribir en la carrera    
     public function inscribirParticipante(){
         $id = Menu::readln("Ingrese Id de carrera para inscribir: ");
         if($this->existeId($id)){
@@ -259,7 +260,7 @@ class CarreraManager extends ArrayIdManager implements ABMinterface{
             $rta = Menu::readln(PHP_EOL . '¿Está seguro? S/N: ');            
 			if($rta == 'S' or $rta == 's') {            
                 $participantes = $carrera->getParticipantes();
-                //Agrega en el arreglo/tabla de particpantes uno nuevo en la carrera deseada
+                //Agrega en el arreglo/tabla de participantes uno nuevo en la carrera deseada
                  $participantes->alta();
              }
         }
@@ -267,5 +268,25 @@ class CarreraManager extends ArrayIdManager implements ABMinterface{
             $id = Menu::readln("No existe el id de carrera ingresado.");
         }
     }
+    
+   //Solicita en qué carrera, qué participante quiere dar de baja 
+	public function borrarParticipante(){
+        $id = Menu::readln("Ingrese Id de carrera en la que dar de baja un participante: ");
+        if($this->existeId($id)){
+            $carrera = $this->getPorId($id);
+            Menu::writeln('Está por borrar en la siguiente carrera: '. PHP_EOL);
+            $carrera->mostrar();
+            $rta = Menu::readln(PHP_EOL . '¿Está seguro? S/N: ');            
+			if($rta == 'S' or $rta == 's') {            
+                $participantes = $carrera->getParticipantes();
+                //Dará de baja un participante de la carrera elegida
+                 $participantes->baja();
+             }
+        }
+        else{
+            $id = Menu::readln("No existe el id de carrera ingresado.");
+        }
+    }
+
 }
 

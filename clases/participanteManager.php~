@@ -48,17 +48,30 @@ class ParticipanteManager extends ArrayIdManager implements ABMinterface{
         Menu::subtitulo("Participantes clasificados");
 		  //Cantidad de inscriptos en la carrera
         $tamanio = $this->tamanio();		  
+        $lineas = 0;
+        		  
 		  for ($pos = 1; $pos <= $tamanio; $pos++){
 				if (isset($clasificacion[$pos])){       		
         			$participantes[$clasificacion[$pos]]->mostrarCombinado($atletas);
         		} 
+        		$lineas+=1;
+            	if ((($lineas) % (Menu::lineasPorPagina())) === 0) {
+		        		Menu::waitForEnter();
+      		  		Menu::cls(); // Limpiar la pantalla antes de imprimir las siguientes líneas
+    			}
 		  }        
 		  Menu::subtitulo("Participantes que aún no terminaron la carrera");        
         foreach ($participantes as $participante) {
 				if (!$participante->getFinalizo()){            
             	$participante->mostrarCombinado($atletas);
+            	$lineas+=1;
+            	if ((($lineas) % (Menu::lineasPorPagina())) === 0) {
+		        		Menu::waitForEnter();
+      		  		Menu::cls(); // Limpiar la pantalla antes de imprimir las siguientes líneas
+    			}
             }	
         }
+        Menu::waitForEnter();
     }    
     
     //Inscribe un participante en la carrera, creándolo e ingresándolo en DB

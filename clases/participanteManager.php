@@ -240,9 +240,10 @@ class ParticipanteManager extends ArrayIdManager implements ABMinterface{
         $clasificacion = $this->getClasificacion();
         
         $participantes = $this->getArreglo();
+        Menu::writeln("A continuación ingresará el id(dorsal) en cada posición aún no asignada. Terminar con ENTER");
         for ($pos = 1; $pos <= $tamanio ; $pos++) {
             if (!isset($clasificacion[$pos])){ 
-					$idParticipante = Menu::readln("Ingrese id del participante (dorsal) que llegó en posición: " . $pos . " "); 
+					$idParticipante = Menu::readln("Ingrese id del participante(dorsal) que llegó en posición: " . $pos . " "); 
                if ($this->existeId($idParticipante)){
             	    $participante = $this->getPorId($idParticipante);
                	 if (!$participante->getFinalizo()){
@@ -253,7 +254,11 @@ class ParticipanteManager extends ArrayIdManager implements ABMinterface{
                  Menu::writeln("Atención, el participante: " . $participante->getId() . " ya registra la posición: " . $participante->getPosGeneral() . ", si desea cambiarla utilice modificar participación");        
                }
             }else {
-                Menu::writeln("El id ingresado no se encuentra inscripto");
+					 if($idParticipante == "" ) {
+					 	break;
+					 }else {		                
+                	Menu::writeln("El id ingresado no se encuentra inscripto");
+               } 
             }
           }
         }
